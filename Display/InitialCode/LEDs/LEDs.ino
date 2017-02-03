@@ -10,7 +10,7 @@
 Adafruit_DotStar strip = Adafruit_DotStar(
   NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BRG);
 
-void setup() {
+void setup_leds() {
 
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000L)
   clock_prescale_set(clock_div_1); // Enable 16 MHz on Trinket
@@ -20,14 +20,7 @@ void setup() {
   strip.show();  // Turn all LEDs off ASAP
 }
 
-void loop() {
-  setLeds(11);
-  delay(100);
-  setLeds(1);
-  delay(100);
-}
-
-int setLeds (int num_leds) {
+int set_leds (int num_leds) {
   if (num_leds > NUMPIXELS) return 1;
 
   // Clear all pixels
