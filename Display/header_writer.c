@@ -4,27 +4,6 @@
 
 #define outfile "image.h"
 
-// Converts decimal to 8 bit binary number (input must be less than 256)
-char *decimal_to_binary(int n)
-{
-   int c, d, count;
-   char *pointer;
- 
-   count = 0;
-   pointer = (char*)malloc(8+1);
-   if (pointer == NULL) exit(1);
- 
-   for ( c = 7 ; c >= 0 ; c-- ){
-      d = n >> c;
-      if ( d & 1 ) *(pointer+count) = 1 + '0';
-      else *(pointer+count) = 0 + '0'; 
-      count++;
-   }
-   *(pointer+count) = '\0';
- 
-   return pointer;
-}
-
 int main(int argc, char *argv[]){
 
 	// Check that an image file name has been supplied

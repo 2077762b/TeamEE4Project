@@ -1,6 +1,7 @@
 #include "Display.h"
 #include "Font.h"
 #include "Letters.h"
+#include "image.h"
        
 void Write_Command(char cmd){
     PIOC->PIO_CODR = 0x000001fe | DC; // DC = 0 (command)
@@ -93,6 +94,48 @@ void write_char(int start_x, int start_y, int width, int height, unsigned const 
     }
 }
 
+void write_hello_mum(){
+    write_char(32, 32, 24, 32, h);
+    write_char(56, 32, 24, 32, e);
+    write_char(80, 32, 16, 32, l);
+    write_char(96, 32, 16, 32, l);
+    write_char(112, 32, 24, 32, o);
+    write_char(32, 64, 24, 32, m);
+    write_char(56, 64, 24, 32, u);
+    write_char(80, 64, 24, 32, m);
+}
+
+void clear_screen(){
+    Write_Command(0x2C);
+    for(int i=0; i<76800; i++){
+        Write_Parameter(0x00);
+        Write_Parameter(0x00);
+        Write_Parameter(0x00);
+    }
+}
+
+void display_ppm_image(int start_x, int start_y, int width, int height, const unsigned char * bit_array ){
+     // Set Window parameters
+    Write_Command(0x2A);
+    Write_Parameter(start_x>>8);
+    Write_Parameter(start_x);
+    Write_Parameter((start_x + width-1)>>8);
+    Write_Parameter((start_x + width-1));
+    Write_Command(0x2B);
+    Write_Parameter(start_y>>8);
+    Write_Parameter(start_y);
+    Write_Parameter((start_y + height-1)>>8);
+    Write_Parameter((start_y + height-1));
+    
+    char c;
+    Write_Command(0x2C);
+    for (int i=0; i<(width*height);) {
+        for (int j=0; j<3; j++){
+            Write_Parameter(bit_array[i++]);
+        }
+    }
+}
+
 //======================================================
 void init_LCD() 
 {
@@ -166,22 +209,8 @@ void init_LCD()
     Write_Command(0x29);
     delay(10);
     
-    // Set background to Black
-    Write_Command(0x2C);
-    for(int i=0; i<76800; i++){
-        Write_Parameter(0x00);
-        Write_Parameter(0x00);
-        Write_Parameter(0x00);
-    }
-
-    write_char(32, 32, 24, 32, h);
-   /* write_char(64, 32, 32, 48, one_64);
-    write_char(96, 32, 32, 48, one_64);
-    write_char(128, 32, 32, 48, one_64);
-    write_char(160, 32, 32, 48, one_64);
-    write_char(32, 72, 32, 48, one_64);
-    write_char(64, 72, 32, 48, one_64);
-    write_char(96, 72, 32, 48, one_64);*/
-    
+    clear_screen();
+    //write_hello_mum();
+    display_ppm_image(0,0,320,240,picture);
 }
 
