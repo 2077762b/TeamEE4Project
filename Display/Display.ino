@@ -1,8 +1,13 @@
 #include "Display.h"
-//#include "formula1.h"
 #include "Letters24.h"
 #include "Numbers24.h"
-       
+
+#define SOURCE 320
+#define GATE 240
+#define OIL_THRESHOLD 80
+#define FUEL_THRESHOLD 20
+#define COOL_THRESHOLD 50
+ 
 void Write_Command(char cmd){
     PIOC->PIO_CODR = 0x000001fe | DC; // DC = 0 (command)
     PIOC->PIO_SODR = cmd << 1;
@@ -28,8 +33,10 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
-  for (int i=100;i>=0;i--){
-    write_fuel(i);
+  write_fuel(67,200,30);
+  write_oil(87,200,60);
+  for (int i=0;i<120;i++){
+    write_cool(i,200,90);
     delay(100);
   }
 }
@@ -73,12 +80,13 @@ void write_char(int start_x, int start_y, int width, int height, const unsigned 
     }
 }
 
-void write_fuel(int level){
-    // Fuel level
-    
-    int x = 210;
-    int y = 30;
-    
+// Fuel level
+void write_fuel(int level, int x, int y){
+  
+    // Make sure fuel is a proper percentage
+    if (level > 100) level = 100;
+
+    // Write word 'Fuel:'
     write_char(x, y, F_24_blocks*8, 24, F_24,1,1,1);
     x = x + F_24_width + 2;
     write_char(x, y, u_24_blocks*8, 24, u_24,1,1,1);
@@ -91,11 +99,12 @@ void write_fuel(int level){
     x = x + colon_24_width + 10;
 
     int r = 0,g = 1;
-    if (level < 20) {
+    if (level < FUEL_THRESHOLD) {
       r = 1;
       g = 0;
     }
-    clear_area(x,y,60,24);
+    clear_area(x,y,SOURCE-x,24);
+    
     if (level >= 100) {
          write_char(x, y, 16, 24, numbers_24[(level/100)%10],r,g,0);
          if ((level/100)%10 == 1) x = x + 10;
@@ -109,34 +118,94 @@ void write_fuel(int level){
     write_char(x, y, 16, 24, numbers_24[level%10],r,g,0);
     if (level%10 == 1) x = x + 10;
     else x = x + 14;
-    
-    write_char(x, y, percent_24_blocks*8, 24, percent_24,r,g,0);
+       
+    write_char(x, y, percent_24_blocks*8, 24, percent_24,r,g,0);    
 }
 
-void write_levels(){
-    // Oil level
-    int total = 210;
-    write_char(total, 60, O_24_blocks*8, 24, O_24,1,1,1);
-    total = total + O_24_width + 2;
-    write_char(total, 60, i_24_blocks*8, 24, i_24,1,1,1);
-    total = total + i_24_width + 2;
-    write_char(total, 60, l_24_blocks*8, 24, l_24,1,1,1);
-    total = total + l_24_width + 2;
-    write_char(total, 60, colon_24_blocks*8, 24, colon_24,1,1,1);
-    total = total + colon_24_width + 2;
+// Oil level
+void write_oil(int level, int x, int y){
 
-    // Collant level
-    total = 210;
-    write_char(total, 90, C_24_blocks*8, 24, C_24,1,1,1);
-    total = total + C_24_width + 2;
-    write_char(total, 90, o_24_blocks*8, 24, o_24,1,1,1);
-    total = total + o_24_width + 2;
-    write_char(total, 90, o_24_blocks*8, 24, o_24,1,1,1);
-    total = total + o_24_width + 2;
-    write_char(total, 90, l_24_blocks*8, 24, l_24,1,1,1);
-    total = total + l_24_width + 2;
-    write_char(total, 90, colon_24_blocks*8, 24, colon_24,1,1,1);
-    total = total + colon_24_width + 2;
+    // Make sure fuel is a proper percentage
+    if (level > 999) level = 999;
+
+    // Write word 'Oil:'
+    write_char(x, y, O_24_blocks*8, 24, O_24,1,1,1);
+    x = x + O_24_width + 2;
+    write_char(x, y, i_24_blocks*8, 24, i_24,1,1,1);
+    x = x + i_24_width + 2;
+    write_char(x, y, l_24_blocks*8, 24, l_24,1,1,1);
+    x = x + l_24_width + 2;
+    write_char(x, y, colon_24_blocks*8, 24, colon_24,1,1,1);
+    x = x + colon_24_width + 10;
+
+    int r = 0,g = 1;
+    if (level > OIL_THRESHOLD) {
+      r = 1;
+      g = 0;
+    }
+    clear_area(x,y,SOURCE-x,24);
+    
+    if (level >= 100) {
+         write_char(x, y, 16, 24, numbers_24[(level/100)%10],r,g,0);
+         if ((level/100)%10 == 1) x = x + 10;
+         else x = x + 14;
+    }
+    if (level >= 10) {
+         write_char(x, y, 16, 24, numbers_24[(level/10)%10],r,g,0);
+         if ((level/10)%10 == 1) x = x + 10;
+         else x = x + 14;
+    }
+    write_char(x, y, 16, 24, numbers_24[level%10],r,g,0);
+    if (level%10 == 1) x = x + 10;
+    else x = x + 14;
+
+    write_char(x, y, degree_24_blocks*8, 24, degree_24,r,g,0);
+    x = x + 8;
+    write_char(x, y, C_24_blocks*8, 24, C_24,r,g,0);
+}
+
+// Oil level
+void write_cool(int level, int x, int y){
+
+    // Make sure fuel is a proper percentage
+    if (level > 999) level = 999;
+
+    // Write word 'Cool:'
+    write_char(x, y, C_24_blocks*8, 24, C_24,1,1,1);
+    x = x + C_24_width + 2;
+    write_char(x, y, o_24_blocks*8, 24, o_24,1,1,1);
+    x = x + o_24_width + 2;
+    write_char(x, y, o_24_blocks*8, 24, o_24,1,1,1);
+    x = x + o_24_width + 2;
+    write_char(x, y, l_24_blocks*8, 24, l_24,1,1,1);
+    x = x + l_24_width + 2;
+    write_char(x, y, colon_24_blocks*8, 24, colon_24,1,1,1);
+    x = x + colon_24_width + 10;
+
+    int r = 0,g = 1;
+    if (level > COOL_THRESHOLD) {
+      r = 1;
+      g = 0;
+    }
+    clear_area(x,y,SOURCE-x,24);
+    
+    if (level >= 100) {
+         write_char(x, y, 16, 24, numbers_24[(level/100)%10],r,g,0);
+         if ((level/100)%10 == 1) x = x + 10;
+         else x = x + 14;
+    }
+    if (level >= 10) {
+         write_char(x, y, 16, 24, numbers_24[(level/10)%10],r,g,0);
+         if ((level/10)%10 == 1) x = x + 10;
+         else x = x + 14;
+    }
+    write_char(x, y, 16, 24, numbers_24[level%10],r,g,0);
+    if (level%10 == 1) x = x + 10;
+    else x = x + 14;
+
+    write_char(x, y, degree_24_blocks*8, 24, degree_24,r,g,0);
+    x = x + 8;
+    write_char(x, y, C_24_blocks*8, 24, C_24,r,g,0);
 }
 
 void clear_screen(){
@@ -195,10 +264,6 @@ void display_ppm_image(int start_x, int start_y, int width, int height, const un
 //======================================================
 void init_LCD() 
 {
-   unsigned int SOURCE,GATE;
-   SOURCE=320;
-   GATE=240;
-
     PIOC->PIO_SODR = RESET;
     delay(10);
     PIOC->PIO_CODR = RESET;
@@ -265,9 +330,7 @@ void init_LCD()
     Write_Command(0x29);
     delay(10);
     
-    clear_screen();
-    write_levels();
-    
+    clear_screen();    
     //display_ppm_image(0,0,width,height,image);
 }
 
