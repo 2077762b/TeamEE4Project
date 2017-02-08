@@ -28,6 +28,10 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
+  for (int i=100;i>=0;i--){
+    write_fuel(i);
+    delay(100);
+  }
 }
 
 void write_char(int start_x, int start_y, int width, int height, const unsigned char * bit_array, int red, int green, int blue ) {
@@ -69,54 +73,44 @@ void write_char(int start_x, int start_y, int width, int height, const unsigned 
     }
 }
 
-/*
-void write_hello_mum(){
-    write_char(32, 32, 24, 32, h);
-    write_char(56, 32, 24, 32, e);
-    write_char(80, 32, 16, 32, l);
-    write_char(96, 32, 16, 32, l);
-    write_char(112, 32, 24, 32, o);
-    write_char(32, 64, 24, 32, m);
-    write_char(56, 64, 24, 32, u);
-    write_char(80, 64, 24, 32, m);
-}
-*/
-/*
-const unsigned char * num_to_name(int num, char height){
-  height = (unsigned)height + '0';
-  if (num == 0) return "zero_" + height;
-  if (num == 1) return "one_" + height;
-}
-*/
-void write_fuel(){
+void write_fuel(int level){
     // Fuel level
+    
+    int x = 210;
+    int y = 30;
+    
+    write_char(x, y, F_24_blocks*8, 24, F_24,1,1,1);
+    x = x + F_24_width + 2;
+    write_char(x, y, u_24_blocks*8, 24, u_24,1,1,1);
+    x = x + u_24_width + 2;
+    write_char(x, y, e_24_blocks*8, 24, e_24,1,1,1);
+    x = x + e_24_width + 2;
+    write_char(x, y, l_24_blocks*8, 24, l_24,1,1,1);
+    x = x + l_24_width + 2;
+    write_char(x, y, colon_24_blocks*8, 24, colon_24,1,1,1);
+    x = x + colon_24_width + 10;
 
-    int level = 101;
-    int total = 210;
-    write_char(total, 30, F_24_blocks*8, 24, F_24,1,1,1);
-    total = total + F_24_width + 2;
-    write_char(total, 30, u_24_blocks*8, 24, u_24,1,1,1);
-    total = total + u_24_width + 2;
-    write_char(total, 30, e_24_blocks*8, 24, e_24,1,1,1);
-    total = total + e_24_width + 2;
-    write_char(total, 30, l_24_blocks*8, 24, l_24,1,1,1);
-    total = total + l_24_width + 2;
-    write_char(total, 30, colon_24_blocks*8, 24, colon_24,1,1,1);
-    total = total + colon_24_width + 2;
-
-    if ( level >= 100) {
-         write_char(total, 30, 16, 24, numbers_24[(level/100)%10],0,1,0);
-         if ((level/100)%10 == 1) total = total + 8;
-         else total = total + 12;
+    int r = 0,g = 1;
+    if (level < 20) {
+      r = 1;
+      g = 0;
     }
-    if ( level >= 10) {
-         write_char(total, 30, 16, 24, numbers_24[(level/10)%10],0,1,0);
-         if ((level/10)%10 == 1) total = total + 8;
-         else total = total + 12;
+    clear_area(x,y,60,24);
+    if (level >= 100) {
+         write_char(x, y, 16, 24, numbers_24[(level/100)%10],r,g,0);
+         if ((level/100)%10 == 1) x = x + 10;
+         else x = x + 14;
     }
-    write_char(total, 30, 16, 24, numbers_24[level%10],0,1,0);
-    if (level%10 == 1) total = total + 8;
-    else total = total + 12;
+    if (level >= 10) {
+         write_char(x, y, 16, 24, numbers_24[(level/10)%10],r,g,0);
+         if ((level/10)%10 == 1) x = x + 10;
+         else x = x + 14;
+    }
+    write_char(x, y, 16, 24, numbers_24[level%10],r,g,0);
+    if (level%10 == 1) x = x + 10;
+    else x = x + 14;
+    
+    write_char(x, y, percent_24_blocks*8, 24, percent_24,r,g,0);
 }
 
 void write_levels(){
@@ -151,6 +145,30 @@ void clear_screen(){
         Write_Parameter(0x00);
         Write_Parameter(0x00);
         Write_Parameter(0x00);
+    }
+}
+
+void clear_area(int start_x, int start_y, int width, int height) {
+    // Set Window parameters
+    Write_Command(0x2A);
+    Write_Parameter(start_x>>8);
+    Write_Parameter(start_x);
+    Write_Parameter((start_x + width-1)>>8);
+    Write_Parameter((start_x + width-1));
+    Write_Command(0x2B);
+    Write_Parameter(start_y>>8);
+    Write_Parameter(start_y);
+    Write_Parameter((start_y + height-1)>>8);
+    Write_Parameter((start_y + height-1));
+    
+    // Write character from Hexidecimal
+    char y,z;
+    Write_Command(0x2C);
+    
+    for (int i=0; i<(width*height); i++) {
+      Write_Parameter(0x00);
+      Write_Parameter(0x00);
+      Write_Parameter(0x00);
     }
 }
 
@@ -249,7 +267,6 @@ void init_LCD()
     
     clear_screen();
     write_levels();
-    write_fuel();
     
     //display_ppm_image(0,0,width,height,image);
 }

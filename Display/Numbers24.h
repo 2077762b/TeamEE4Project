@@ -281,7 +281,15 @@ const unsigned char nine_24[] =
 const unsigned char * numbers_24 [] =
 {
   zero_24,
-  one_24
+  one_24,
+  two_24,
+  three_24,
+  four_24,
+  five_24,
+  six_24,
+  seven_24,
+  eight_24,
+  nine_24
 };
 
 
