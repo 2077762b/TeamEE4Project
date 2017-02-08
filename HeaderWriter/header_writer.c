@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define outfile "image.h"
+#define outfile "formula1.h"
 
 int main(int argc, char *argv[]){
 
@@ -82,3 +82,4 @@ int main(int argc, char *argv[]){
 }
 
 	
+
