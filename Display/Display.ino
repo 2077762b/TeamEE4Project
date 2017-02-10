@@ -11,6 +11,10 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
+    for (int i = 100; i >= 0; i--){
+      update_fuel(i);
+      delay(100);
+    }
 }
 
 // Show gauges
@@ -35,36 +39,3 @@ void update_fuel(int level){
   write_word(str,fuel_start,30,r,g,b);
 }
 
-/*
-// Oil level
-void write_oil(int level, int x, int y){
-
-    // Make sure fuel is a proper percentage
-    if (level > 999) level = 999;
-
-    int r = 0,g = 1;
-    if (level > OIL_THRESHOLD) {
-      r = 1;
-      g = 0;
-    }
-    clear_area(x,y,SOURCE-x,24);
-    
-    if (level >= 100) {
-         write_char(x, y, 16, 24, numbers_24[(level/100)%10],r,g,0);
-         if ((level/100)%10 == 1) x = x + 10;
-         else x = x + 14;
-    }
-    if (level >= 10) {
-         write_char(x, y, 16, 24, numbers_24[(level/10)%10],r,g,0);
-         if ((level/10)%10 == 1) x = x + 10;
-         else x = x + 14;
-    }
-    write_char(x, y, 16, 24, numbers_24[level%10],r,g,0);
-    if (level%10 == 1) x = x + 10;
-    else x = x + 14;
-
-    write_char(x, y, degree_24_blocks*8, 24, degree_24,r,g,0);
-    x = x + 8;
-    write_char(x, y, C_24_blocks*8, 24, C_24,r,g,0);
-}
-*/
