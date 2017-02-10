@@ -43,9 +43,9 @@ void init_LCD()
         Write_Parameter(0x2C);
         Write_Parameter(0x80);
         Write_Parameter((SOURCE-1)>>8);
-        Write_Parameter(SOURCE-1);
+        Write_Parameter((char)SOURCE-1);
         Write_Parameter((GATE-1)>>8);
-        Write_Parameter(GATE-1);
+        Write_Parameter((char)GATE-1);
         Write_Parameter(0x00);
     Write_Command(0xf0);
         Write_Parameter(0x00); //0x03 is 16bit(565 format);0x00 is for 8-bit,pixel data format
@@ -80,12 +80,12 @@ void init_LCD()
         Write_Parameter(0x00);
         Write_Parameter(0x00);
         Write_Parameter((SOURCE-1)>>8);
-        Write_Parameter(SOURCE-1);
+        Write_Parameter((char)SOURCE-1);
     Write_Command(0x2b);
         Write_Parameter(0x00);
         Write_Parameter(0x00);
         Write_Parameter((GATE-1)>>8);
-        Write_Parameter(GATE-1);
+        Write_Parameter((char)GATE-1);
     Write_Command(0x29);
     delay(10);
 
@@ -181,15 +181,23 @@ void clear_area(int start_x, int start_y, int width, int height) {
     }
 }
 
-int write_word(const char * w, int x, int y, int r, int g, int b){
+int write_word(const char * w, int x, int y, int r, int g, int b, int font){
 
+  Font * current_font;
+  if (font == 48) current_font = font_48;
+  else if (font == 96) current_font = font_96;
+  else {
+    current_font = font_24;
+    font = 24;
+  }
+  
   double width;
   int chars = sizeof(w);
   for (int i=0; i < chars; i++){
-    width = ceil((double)font_24[*w].width/8)*8;
-    write_char(x,y,width,24,font_24[*w].data,r,g,b);
-    x = x + font_24[*w].width + 2;
+    width = ceil((double)current_font[*w].width/8)*8;
+    write_char(x,y,width,font,current_font[*w].data,r,g,b);
+    x = x + current_font[*w].width + 2;
     w++;
   }
-  return x;
+  return x+5;
 }

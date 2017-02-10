@@ -1,4 +1,4 @@
-#include "font24.h"
+#include "Fonts.h"
 
 void setup_font_24(){
   font_24[48] = {zero_24, 10};
@@ -15,7 +15,6 @@ void setup_font_24(){
   font_24[37] = {percent_24, 17};   // %
   font_24[39] = {degree_24, 7};     // '
   font_24[58] = {colon_24, 2};      // :
-  
   
   font_24[67] = {C_24, 14};
   font_24[70] = {F_24, 11};
@@ -34,5 +33,4 @@ void setup_font_24(){
   font_24[114] = {r_24, 6};
   font_24[116] = {t_24, 5};
   font_24[117] = {u_24, 10};
-
 }
