@@ -1,3 +1,6 @@
+#ifndef NUMBERS24_H_  
+#define NUMBERS24_H_
+
 const unsigned char zero_24[] = 
 {
   0x1E, 0x00, //    ####   
@@ -28,30 +31,30 @@ const unsigned char zero_24[] =
 
 const unsigned char one_24[] = 
 {
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x1C, 0x00, //    ###
-  0x3C, 0x00, //   ####
-  0x7C, 0x00, //  #####
-  0xCC, 0x00, // ##  ##
-  0x8C, 0x00, // #   ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x0C, 0x00, //     ##
-  0x00, 0x00, //       
-  0x00, 0x00, //       
-  0x00, 0x00, //       
-  0x00, 0x00, //       
-  0x00, 0x00  //       
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x1C,   //    ###
+  0x3C,   //   ####
+  0x7C,   //  #####
+  0xCC,   // ##  ##
+  0x8C,   // #   ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x0C,   //     ##
+  0x00,   //       
+  0x00,   //       
+  0x00,   //       
+  0x00,   //       
+  0x00    //       
 };
 
 const unsigned char two_24[] = 
@@ -278,18 +281,5 @@ const unsigned char nine_24[] =
   0x00, 0x00  //
 };    
 
-const unsigned char * numbers_24 [] =
-{
-  zero_24,
-  one_24,
-  two_24,
-  three_24,
-  four_24,
-  five_24,
-  six_24,
-  seven_24,
-  eight_24,
-  nine_24
-};
 
-
+#endif

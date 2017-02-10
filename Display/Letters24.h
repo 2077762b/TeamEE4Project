@@ -1,11 +1,12 @@
-const int percent_24_width = 17;
-const int percent_24_blocks = 3;
+#ifndef LETTERS24_H_  
+#define LETTERS24_H_
+
 const unsigned char percent_24[] = 
 {
   0x38, 0x0C, 0x00, //   ###       ##   
   0x7C, 0x18, 0x00, //  #####     ##    
   0xEE, 0x18, 0x00, // ### ###    ##    
-  0xC6, 0x18, 0x00, // ##   ##    ##    
+  0xC6, 0x18, 0x00, // ##   ##    ##     
   0xC6, 0x30, 0x00, // ##   ##   ##     
   0xC6, 0x30, 0x00, // ##   ##   ##     
   0xC6, 0x60, 0x00, // ##   ##  ##      
@@ -28,8 +29,6 @@ const unsigned char percent_24[] =
   0x00, 0x00, 0x00  //                  
 };
 
-const int colon_24_width = 2;
-const int colon_24_blocks = 1;  
 const unsigned char colon_24[] = 
 {
   0x00, //   
@@ -57,9 +56,7 @@ const unsigned char colon_24[] =
   0x00, //   
   0x00  //   
 };
-
-const int C_24_width = 14;
-const int C_24_blocks = 2;  
+ 
 const unsigned char C_24[] = 
 {
   0x07, 0xC0, //      #####    
@@ -88,8 +85,6 @@ const unsigned char C_24[] =
   0x00, 0x00  //              
 };
 
-const int F_24_width = 11;
-const int F_24_blocks = 2;  
 const unsigned char F_24[] = 
 {
   0xFF, 0xE0, // ###########
@@ -118,8 +113,6 @@ const unsigned char F_24[] =
   0x00, 0x00  //            
 };
 
-const int G_24_width = 15;
-const int G_24_blocks = 2;  
 const unsigned char G_24[] = 
 {
   0x07, 0xE0, //      ######    
@@ -147,9 +140,7 @@ const unsigned char G_24[] =
   0x00, 0x00, //                
   0x00, 0x00  //                
 };
-
-const int O_24_width = 15;
-const int O_24_blocks = 2;  
+  
 const unsigned char O_24[] = 
 {
   0x07, 0xC0, //      #####     
@@ -178,8 +169,6 @@ const unsigned char O_24[] =
   0x00, 0x00  //                
 };
 
-const int a_24_width = 10;
-const int a_24_blocks = 2;  
 const unsigned char a_24[] = 
 {
   0x00, 0x00, //           
@@ -208,8 +197,6 @@ const unsigned char a_24[] =
   0x00, 0x00            
 };
 
-const int e_24_width = 10;
-const int e_24_blocks = 2;  
 const unsigned char e_24[] = 
 {
   0x00, 0x00, //           
@@ -237,9 +224,7 @@ const unsigned char e_24[] =
   0x00, 0x00, //           
   0x00, 0x00  //           
 };
-
-const int h_24_width = 10;
-const int h_24_blocks = 2;  
+ 
 const unsigned char h_24[] = 
 {
   0xC0, 0x00, // ##        
@@ -268,8 +253,6 @@ const unsigned char h_24[] =
   0x00, 0x00  //           
 };
 
-const int i_24_width = 2;
-const int i_24_blocks = 1;  
 const unsigned char i_24[] = 
 {
   0xC0, // ##
@@ -298,8 +281,6 @@ const unsigned char i_24[] =
   0x00  //   
 };
 
-const int l_24_width = 2;
-const int l_24_blocks = 1;  
 const unsigned char l_24[] = 
 {
   0xC0, // ##
@@ -328,8 +309,6 @@ const unsigned char l_24[] =
   0x00  //   
 };
 
-const int m_24_width = 16;
-const int m_24_blocks = 2;  
 const unsigned char m_24[] = 
 {
   0x00, 0x00, //                 
@@ -357,9 +336,7 @@ const unsigned char m_24[] =
   0x00, 0x00, //                 
   0x00, 0x00 //                 
 };
-
-const int n_24_width = 10;
-const int n_24_blocks = 2;  
+ 
 const unsigned char n_24[] = 
 {
   0x00, 0x00, //           
@@ -388,8 +365,6 @@ const unsigned char n_24[] =
   0x00, 0x00 //           
 };
 
-const int o_24_width = 10;
-const int o_24_blocks = 2;  
 const unsigned char o_24[] = 
 {
   0x00, 0x00, //           
@@ -418,8 +393,6 @@ const unsigned char o_24[] =
   0x00, 0x00  //           
 };
 
-const int p_24_width = 10;
-const int p_24_blocks = 2;  
 const unsigned char p_24[] = 
 {
   0x00, 0x00, //           
@@ -447,9 +420,7 @@ const unsigned char p_24[] =
   0xC0, 0x00, // ##        
   0xC0, 0x00 // ##        
 };
-
-const int r_24_width = 6;
-const int r_24_blocks = 1;  
+ 
 const unsigned char r_24[] = 
 {
   0x00, //       
@@ -478,8 +449,6 @@ const unsigned char r_24[] =
   0x00  //       
 };
 
-const int t_24_width = 5;
-const int t_24_blocks = 1;  
 const unsigned char t_24[] = 
 {
   0x20, //   #  
@@ -508,8 +477,6 @@ const unsigned char t_24[] =
   0x00  //  
 };
 
-const int u_24_width = 10;
-const int u_24_blocks = 2;  
 const unsigned char u_24[] = 
 {    
   0x00, 0x00, //           
@@ -537,9 +504,7 @@ const unsigned char u_24[] =
   0x00, 0x00, //           
   0x00, 0x00  //           
 };
-
-const int degree_24_width = 7;
-const int degree_24_blocks = 1;  
+ 
 const unsigned char degree_24[] = 
 {
   0x38, //   ###  
@@ -567,3 +532,5 @@ const unsigned char degree_24[] =
   0x00, //        
   0x00  //        
 };
+
+#endif
