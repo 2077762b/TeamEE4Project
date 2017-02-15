@@ -1,6 +1,7 @@
 #include "Fonts.h"
 
 void setup_font_24(){
+  
   font_24[48] = {zero_24, 10};
   font_24[49] = {one_24, 6};
   font_24[50] = {two_24, 10};

@@ -1,5 +1,4 @@
 #include "Display_driver.h"
-#include <Arduino.h>
 
 void Write_Command(char cmd){
     PIOC->PIO_CODR = 0x000001fe | DC; // DC = 0 (command)
@@ -192,7 +191,7 @@ int write_word(const char * w, int x, int y, int r, int g, int b, int font){
   }
   
   double width;
-  int chars = sizeof(w);
+  int chars = strlen(w);
   for (int i=0; i < chars; i++){
     width = ceil((double)current_font[*w].width/8)*8;
     write_char(x,y,width,font,current_font[*w].data,r,g,b);

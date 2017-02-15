@@ -1,6 +1,7 @@
 #include "Fonts.h"
 
 void setup_font_96(){
+  
   font_96[48] = {n_96, 61};
   font_96[49] = {one_96, 34};
   font_96[50] = {two_96, 61};

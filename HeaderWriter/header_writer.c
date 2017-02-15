@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define outfile "formula1.h"
+#define outfile "coolant.h"
 
 int main(int argc, char *argv[]){
 
