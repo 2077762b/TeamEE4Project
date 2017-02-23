@@ -34,6 +34,7 @@ void update_fuel(int level){
   int r = 0, g = 0, b = 0;
   if (level < FUEL_THRESHOLD) r = 1;
   else g = 1;
+  set_fuel(r);
     
   char str[6]; 
   sprintf(str, "%d%%\n", level);
@@ -50,6 +51,7 @@ void update_oil(int level){
   int r = 0, g = 0;
   if (level > OIL_THRESHOLD) r = 1;
   else g = 1;
+  set_oil(r);
     
   char str[6]; 
   sprintf(str, "%d'C\n", level);
@@ -67,6 +69,7 @@ void update_cool(int level){
   int r = 0, g = 0;
   if (level > COOL_THRESHOLD) r = 1;
   else g = 1;
+  set_coolant(r);
     
   char str[5]; 
   sprintf(str, "%d'C\n", level);
@@ -111,17 +114,17 @@ void update_gear(int level){
   write_word(str,115,20,1,1,1,96);
 }
 
-void toggle_fuel(int state){
+void set_fuel(int state){
   if (state) display_ppm_image(130,175,48,48,fuel_image);
   else clear_area(130,175,48,48);
 }
 
-void toggle_coolant(int state){
+void set_coolant(int state){
   if (state) display_ppm_image(190,175,48,48,coolant_image);
   else clear_area(190,175,48,48);
 }
 
-void toggle_oil(int state){
+void set_oil(int state){
   if (state) display_ppm_image(250,175,48,48,oil_image);
   else clear_area(250,175,48,48);
 }

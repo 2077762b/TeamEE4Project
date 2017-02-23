@@ -20,8 +20,8 @@ void update_cool(int level);
 void update_mph(int level);
 void update_rpm(int level);
 void update_gear(int level);
-void toggle_fuel(int state);
-void toggle_coolant(int state);
-void toggle_oil(int state);
+void set_fuel(int state);
+void set_coolant(int state);
+void set_oil(int state);
 
 #endif
