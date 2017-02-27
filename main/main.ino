@@ -10,7 +10,9 @@
 #define ID_5 0x2004 // Ana1 mV - Ana2 mV - Ana3 mV - Cam Advance x 10 
 #define ID_6 0x2005 // Cam Targ x 10 - Cam PWM x 10 - Crank Errors - Cam Error
 
-#define MAX_CAN_FRAME_DATA_LEN 48
+#define MAX_CAN_FRAME_DATA_LEN 8
+
+int diagnostics_mode = 0;
 
 DueFlashStorage dueFlashStorage;
 
@@ -29,33 +31,97 @@ void printFrame(CAN_FRAME *frame, int filter) {
    Serial.print("\r\n");
 }
 
-void gotFrameMB1(CAN_FRAME *frame) {
-  printFrame(frame,0);
-  Serial.print(frame->data.bytes[0], HEX);
-  Serial.print(frame->data.bytes[1], HEX);
-  Serial.print(frame->data.bytes[2], HEX);
-  Serial.print(frame->data.bytes[3], HEX);
-  Serial.print("\n");
+/*
+void update_diagnostics_frame(can_id, frame) {
+  int16_t value_1 = (frame->data.byte[1]<<8) | frame->data.byte[0];
+  int16_t value_2 = (frame->data.byte[3]<<8) | frame->data.byte[2];
+  int16_t value_3 = (frame->data.byte[5]<<8) | frame->data.byte[4];
+  int16_t value_4 = (frame->data.byte[7]<<8) | frame->data.byte[6];
+
+  update_diagnostics(CAN_ID, value_1);
+  update_diagnostics(CAN_ID, value_2);
+  update_diagnostics(CAN_ID, value_3);
+  update_diagnostics(CAN_ID, value_4);
+}
+*/
+
+void gotFrame2000(CAN_FRAME *frame) {
+  int CAN_ID = 2000;
+
+  // System works in Display Mode
+  if (diagnostics_mode == 0) {
+    int16_t RPM = (frame->data.byte[1]<<8) | frame->data.byte[0];
+    update_rpm(RPM);
+    return;
+  }
+
+  // System in Diagnostics Mode
+  // update_diagnostics_frame(CAN_ID, frame);
 }
 
-void gotFrameMB2(CAN_FRAME *frame) {
-  printFrame(frame,0);
+void gotFrame2001(CAN_FRAME *frame) {
+  int CAN_ID = 2001;
+
+  // System works in Display Mode
+  if (diagnostics_mode == 0) {
+    int16_t kph = (frame->data.byte[1]<<8) | frame->data.byte[0];
+    update_mph(kph * 0.62137);
+    return;
+  }
+  
+  // System in Diagnostics Mode
+  // update_diagnostics_frame(CAN_ID, frame);
 }
 
-void gotFrameMB3(CAN_FRAME *frame) {
-  printFrame(frame,0);
+void gotFrame2002(CAN_FRAME *frame) {
+  int CAN_ID = 2002;
+
+  // System works in Display Mode
+  if (diagnostics_mode == 0) {
+      return;
+  }
+  
+  // System in Diagnostics Mode
+  // update_diagnostics_frame(CAN_ID, frame);
 }
 
-void gotFrameMB4(CAN_FRAME *frame) {
-  printFrame(frame,0);
+void gotFrame2003(CAN_FRAME *frame) {
+  int CAN_ID = 2000;
+
+  // System works in Display Mode
+  if (diagnostics_mode == 0) {
+    int16_t gear = (frame->data.byte[1]<<8) | frame->data.byte[0];
+    update_gear(gear);
+    return;
+  }
+
+  // System in Diagnostics Mode
+  // update_diagnostics_frame(CAN_ID, frame);
+
 }
 
-void gotFrameMB5(CAN_FRAME *frame) {
-  printFrame(frame,0);
+void gotFrame2004(CAN_FRAME *frame) {
+  int CAN_ID = 2004;
+
+  // System works in Display Mode
+  if (diagnostics_mode == 0) {
+    return;
+  }
+  
+  // System in Diagnostics Mode
+  // update_diagnostics_frame(CAN_ID, frame);
 }
 
-void gotFrameMB6(CAN_FRAME *frame) {
-  printFrame(frame,0);
+void gotFrame2005(CAN_FRAME *frame) {
+  int CAN_ID = 2005;
+
+  // System works in Display Mode
+  if (diagnostics_mode == 0) {
+    return;
+  }
+  
+  // System in Diagnostics Mode
+  // update_diagnostics_frame(CAN_ID, frame);
 }
 
 void setup()
@@ -69,52 +135,57 @@ void setup()
   Can1.begin(CAN_BPS_250K);
   
   Can0.setRXFilter(1, ID_1, 0x1FFFFFFF, true);
-  Can0.setRXFilter(2, ID_2, 0x1FFFFFFF, true); 
-  Can0.setRXFilter(3, ID_3, 0x1FFFFFFF, true); 
-  Can0.setRXFilter(4, ID_4, 0x1FFFFFFF, true); 
-  Can0.setRXFilter(5, ID_5, 0x1FFFFFFF, true); 
-  Can0.setRXFilter(6, ID_6, 0x1FFFFFFF, true); 
+  Can0.setRXFilter(2, ID_2, 0x1FFFFFFF, true);
+  Can0.setRXFilter(3, ID_3, 0x1FFFFFFF, true);
+  Can0.setRXFilter(4, ID_4, 0x1FFFFFFF, true);
+  Can0.setRXFilter(5, ID_5, 0x1FFFFFFF, true);
+  Can0.setRXFilter(6, ID_6, 0x1FFFFFFF, true);
 
-  Can0.setCallback(1, gotFrameMB1);
-  Can0.setCallback(2, gotFrameMB2);
-  Can0.setCallback(3, gotFrameMB3);
-  Can0.setCallback(4, gotFrameMB4);
-  Can0.setCallback(5, gotFrameMB5);
-  Can0.setCallback(6, gotFrameMB6);
+  Can0.setCallback(1, gotFrame2000);
+  Can0.setCallback(2, gotFrame2001);
+  Can0.setCallback(3, gotFrame2002);
+  Can0.setCallback(4, gotFrame2003);
+  Can0.setCallback(5, gotFrame2004);
+  Can0.setCallback(6, gotFrame2005);
+
+  /*
+  delay(1000);
+  if (BOTH_BUTTONS_ARE_PUSHED) {
+    diagnostics_mode = 1;
+  }
+
+  while(1) {
+    if (BOTH_BUTTONS_ARE_PUSHED) {
+      diagnostics_mode = 0;
+    }
+  }
+  */
   
 }
 
 void loop() {
+
+    uint8_t b1 = 1;
+    dueFlashStorage.write(0,b1);
+    
     CAN_FRAME output;
     output.id = ID_1;
     output.length = MAX_CAN_FRAME_DATA_LEN;
     output.extended = 1;
-
-    uint8_t b1 = 1;
-    dueFlashStorage.write(0,b1);
-
-    update_gear(1);
-    update_oil(87);
-    update_cool(65);
-    update_fuel(15);
-    update_mph(125);
-    update_rpm(104);
-    set_fuel(1);
-    set_coolant(1);
-    set_oil(1);
  
     for (int i=0;i<4000;i++){
-      output.data.bytes[0] = 0xF;
-      output.data.bytes[1] = 0x01;
-      output.data.bytes[2] = 0x02;
-      output.data.bytes[3] = 0x03;
-      output.data.bytes[4] = 0x03;
-      output.data.bytes[5] = 0x03;
-      output.data.bytes[6] = 0x03;
-      output.data.bytes[7] = 0x03;
+      output.data.bytes[0] = 8;
+      output.data.bytes[1] = 7;
+      output.data.bytes[2] = 0x22;
+      output.data.bytes[3] = 0x33;
+      output.data.bytes[4] = 0x44;
+      output.data.bytes[5] = 0x55;
+      output.data.bytes[6] = 0x66;
+      output.data.bytes[7] = 0x77;
       Can1.sendFrame(output);
       delay(5000);
     }
+    
 }
 
 
