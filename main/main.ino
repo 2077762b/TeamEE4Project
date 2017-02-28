@@ -65,7 +65,7 @@ void gotFrame2001(CAN_FRAME *frame) {
   // System works in Display Mode
   if (diagnostics_mode == 0) {
     int16_t kph = (frame->data.byte[1]<<8) | frame->data.byte[0];
-    update_mph(kph * 0.62137);
+    update_mph(kph * 0.62137 / 10);
     return;
   }
   
@@ -152,13 +152,19 @@ void setup()
   delay(1000);
   if (BOTH_BUTTONS_ARE_PUSHED) {
     diagnostics_mode = 1;
-  }
-
-  while(1) {
-    if (BOTH_BUTTONS_ARE_PUSHED) {
-      diagnostics_mode = 0;
+    while(1) {
+      if (RIGHT_BUTTON_PUSHED) {
+        next_page;
+      }
+      else if (RIGHT_BUTTON_PUSHED) {
+        next_page;
+      }
+      else (BOTH_BUTTONS_ARE_PUSHED) {
+        diagnostics_mode = 0;
+      }
     }
   }
+
   */
   
 }

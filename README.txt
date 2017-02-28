@@ -1,20 +1,29 @@
+Display Mode
 
+ - Speed
+ - Coolant temperature
+ - Air temperature
+ - RPM
+ - Gear
+ - Volts
+ - UGR image (to make it look great!)
 
 Config Mode (serial)
 
- - x number of 'slots', one for each debug value
- - Serial mode allows the user to change what is going to be displayed in each slot
- - When a user wishes to change the information in a slot, they are promted with:
-     - name of new debug value (needs a char limit)
-     - CAN id
-     - size of value (bytes)
-     - starting byte of value in CAN frame
- - This means a function for displaying all the slots and the name of the value that's
-   in them is needed
+char is_full ( 1 - memory has been written before so obtain values)
+             ( 0 - use default hard coded values)
 
- - Allows for the changing of the threshold value of coolant and RPM
+STRUCTURE: int coolant_threshold
+           int speed_units (1 for MPH, 0 for KPH)
+           int array [256] CAN IDs
+           int number_CAN_IDs
 
-Debug Mode
+ - Coolant Threshold
+ - MPH vs KPH
+ - CAN IDs (add and remove)
 
- - Allows user to view information from the x number of slots selected by the config mode
- - One line of text across screan per slot
+Diagnostics 
+
+ - Columns: CAN ID | CAN Value HEX
+ - (Update value only every 1 second)
+ - Pages when the number of CAN IDs are too many
