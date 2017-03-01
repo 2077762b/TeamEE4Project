@@ -35,3 +35,32 @@ void setup_font_24(){
   font_24[116] = {t_24, 5};
   font_24[117] = {u_24, 10};
 }
+
+void setup_font_48(){
+  
+  font_48[48] = {zero_48, 30};
+  font_48[49] = {one_48, 17};
+  font_48[50] = {two_48, 30};
+  font_48[51] = {three_48, 30};
+  font_48[52] = {four_48, 32};
+  font_48[53] = {five_48, 30};
+  font_48[54] = {six_48, 31};
+  font_48[55] = {seven_48, 30};
+  font_48[56] = {eight_48, 30};
+  font_48[57] = {nine_48, 30};
+
+} 
+
+void setup_font_96(){
+  
+  font_96[48] = {n_96, 61};
+  font_96[49] = {one_96, 34};
+  font_96[50] = {two_96, 61};
+  font_96[51] = {three_96, 61};
+  font_96[52] = {four_96, 65};
+  font_96[53] = {five_96, 61};
+  font_96[54] = {six_96, 63};
+  font_96[55] = {seven_96, 61};
+  font_96[56] = {eight_96, 61};
+} 
+ 

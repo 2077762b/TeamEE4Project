@@ -1,3 +1,6 @@
+#ifndef NUMBERS48_H_  
+#define NUMBERS48_H_
+
 const unsigned char zero_48[] = 
 {
   0x00, 0x1F, 0xE0, 0x00, //            ########           
@@ -517,3 +520,5 @@ const unsigned char nine_48[] =
   0x01, 0xFF, 0xF0, 0x00, //        #############          
   0x00, 0x3F, 0xC0, 0x00, //           ########            
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef NUMBERS96_H_  
+#define NUMBERS96_H_
+
 const unsigned char one_96[] = 
 {
   0x00, 0x00, 0x00, 0x3F, 0xC0, //                           ########
@@ -897,3 +900,5 @@ const unsigned char n_96[] =
   0xFF, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x3F, 0xF8, // ##########                                        ###########
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 //                                                              
 };
+
+#endif
