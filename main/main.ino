@@ -26,14 +26,15 @@ void setup()
       }
     }
   }
+  else{
+    setup_display_mode();
+  }
 
   */
   
 }
 
 void loop() {
-
-    //update_config();
 
     CAN_FRAME output;
     output.id = ID_4;

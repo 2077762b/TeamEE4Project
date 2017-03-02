@@ -5,6 +5,9 @@
 
 //#include "formula1.h"
 #include "coolant.h"
+#include "config.h"
+
+#define CAN_ID_START 30
 
 void setup_screen();
    

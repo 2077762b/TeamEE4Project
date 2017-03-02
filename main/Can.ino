@@ -17,7 +17,6 @@ void printFrame(CAN_FRAME *frame, int filter) {
 
 void setup_can(){  
   Can0.begin(CAN_BPS_250K);
-  Can1.begin(CAN_BPS_250K);
   
   Can0.setRXFilter(1, ID_1, 0x1FFFFFFF, true);
   Can0.setRXFilter(2, ID_2, 0x1FFFFFFF, true);
@@ -31,62 +30,49 @@ void setup_can(){
 }
 
 void gotFrame(CAN_FRAME *frame){
-  return;
+  // Only prints frame if system is in Diagnostics mode
+  if (diagnostics_mode == 1) {
+    update_diagnostics(frame->id, frame->data.bytes, frame->length);
+  }
 }
 
 void gotFrame2000(CAN_FRAME *frame) {
- 
-  // System works in Display Mode
+    
+  // Only updates values if system is in Display mode
   if (diagnostics_mode == 0) {
+    // RPM
     int16_t RPM = (frame->data.byte[1]<<8) | frame->data.byte[0];
     update_rpm(RPM);
+    
+    // Coolant
+    int16_t coolant = (frame->data.byte[5]<<8) | frame->data.byte[4];
+    update_cool(coolant);
     return;
   }
 
-  // System in Diagnostics Mode
-  // update_diagnostics_frame(frame);
 }
 
 void gotFrame2001(CAN_FRAME *frame) {
-
-  // System works in Display Mode
+    
+  // Only updates values if system is in Display mode
   if (diagnostics_mode == 0) {
-    int16_t kph = (frame->data.byte[1]<<8) | frame->data.byte[0];
-    update_mph(kph * 0.62137 / 10);
+    // Speed
+    int16_t speed = (frame->data.byte[5]<<8) | frame->data.byte[4];
+    int corrected_speed = (int) speed/10.0;
+    update_speed(corrected_speed);
     return;
   }
-  
-  // System in Diagnostics Mode
-  // update_diagnostics_frame(frame);
+
 }
 
 void gotFrame2003(CAN_FRAME *frame) {
 
-  // System works in Display Mode
+  // Only updates values if system is in Display mode
   if (diagnostics_mode == 0) {
+    // Gear
     int16_t gear = (frame->data.byte[1]<<8) | frame->data.byte[0];
     update_gear(gear);
-    printFrame(frame,3);
-    Serial.println(gear);
     return;
   }
 
-  // System in Diagnostics Mode
-  // update_diagnostics_frame(frame);
-
 }
-
-/*
-void update_diagnostics_frame(can_id, frame) {
-  int16_t value_1 = (frame->data.byte[1]<<8) | frame->data.byte[0];
-  int16_t value_2 = (frame->data.byte[3]<<8) | frame->data.byte[2];
-  int16_t value_3 = (frame->data.byte[5]<<8) | frame->data.byte[4];
-  int16_t value_4 = (frame->data.byte[7]<<8) | frame->data.byte[6];
-
-  update_diagnostics(CAN_ID, value_1);
-  update_diagnostics(CAN_ID, value_2);
-  update_diagnostics(CAN_ID, value_3);
-  update_diagnostics(CAN_ID, value_4);
-}
-*/
-
