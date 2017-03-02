@@ -35,23 +35,44 @@ void setup()
 }
 
 void loop() {
+    Can1.begin(CAN_BPS_250K);
 
-    CAN_FRAME output;
-    output.id = ID_4;
-    output.length = MAX_CAN_FRAME_DATA_LEN;
-    output.extended = 1;
+    CAN_FRAME output1;
+    output1.id = ID_1;
+    output1.length = 8;
+    output1.extended = 1;
+    diagnostics_mode = 1;
+    //update_config();
  
     for (int i=0;i<4000;i++){
-      output.data.bytes[0] = 0x05;
-      output.data.bytes[1] = 0x00;
-      output.data.bytes[2] = 0x22;
-      output.data.bytes[3] = 0x33;
-      output.data.bytes[4] = 0x44;
-      output.data.bytes[5] = 0x55;
-      output.data.bytes[6] = 0x66;
-      output.data.bytes[7] = 0x77;
-      Can1.sendFrame(output);
-      delay(100);
+      output1.data.bytes[0] = 0x05;
+      output1.data.bytes[1] = 0x00;
+      output1.data.bytes[2] = 0x22;
+      output1.data.bytes[3] = 0x33;
+      output1.data.bytes[4] = 0x44;
+      output1.data.bytes[5] = 0x55;
+      output1.data.bytes[6] = 0x66;
+      output1.data.bytes[7] = 0x77;
+      Can1.sendFrame(output1);
+      delay(1000);
+    }
+
+    CAN_FRAME output2;
+    output2.id = ID_2;
+    output2.length = 8;
+    output2.extended = 1;
+ 
+    for (int i=0;i<4000;i++){
+      output2.data.bytes[0] = 0x05;
+      output2.data.bytes[1] = 0x00;
+      output2.data.bytes[2] = 0x22;
+      output2.data.bytes[3] = 0x33;
+      output2.data.bytes[4] = 0x44;
+      output2.data.bytes[5] = 0x55;
+      output2.data.bytes[6] = 0x66;
+      output2.data.bytes[7] = 0x77;
+      Can1.sendFrame(output2);
+      delay(1000);
     }    
 }
 

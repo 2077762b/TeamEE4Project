@@ -1,7 +1,7 @@
 #include "config.h"
 
 void setup_config() {
-  
+  /*
   Serial.begin(9600);
   delay(500);
 
@@ -24,10 +24,11 @@ void setup_config() {
     uint8_t* b = dueFlashStorage.readAddress(CONFIG_ADDR); 
     memcpy(&configuration, b, sizeof(Configuration));
   }
+  */
 }
 
 void update_config(){
-
+/*
   Serial.println("Current Configuration");
   Serial.println("*********************");
   Serial.print("Coolant Threshold: ");
@@ -72,5 +73,6 @@ void update_config(){
   uint8_t b[sizeof(Configuration)]; 
   memcpy(b, &configuration, sizeof(Configuration)); 
   dueFlashStorage.write(CONFIG_ADDR, b, sizeof(Configuration));
+  */
 }
 

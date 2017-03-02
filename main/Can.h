@@ -11,7 +11,6 @@
 #define ID_5 0x2004 // Ana1 mV - Ana2 mV - Ana3 mV - Cam Advance x 10 
 #define ID_6 0x2005 // Cam Targ x 10 - Cam PWM x 10 - Crank Errors - Cam Error
 
-#define MAX_CAN_FRAME_DATA_LEN 8
 void setup_can();
 
 #endif

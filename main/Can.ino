@@ -32,12 +32,11 @@ void setup_can(){
 void gotFrame(CAN_FRAME *frame){
   // Only prints frame if system is in Diagnostics mode
   if (diagnostics_mode == 1) {
-    update_diagnostics(frame->id, frame->data.bytes, frame->length);
+    update_diagnostics(frame);
   }
 }
 
 void gotFrame2000(CAN_FRAME *frame) {
-    
   // Only updates values if system is in Display mode
   if (diagnostics_mode == 0) {
     // RPM
@@ -49,11 +48,9 @@ void gotFrame2000(CAN_FRAME *frame) {
     update_cool(coolant);
     return;
   }
-
 }
 
 void gotFrame2001(CAN_FRAME *frame) {
-    
   // Only updates values if system is in Display mode
   if (diagnostics_mode == 0) {
     // Speed
@@ -62,11 +59,9 @@ void gotFrame2001(CAN_FRAME *frame) {
     update_speed(corrected_speed);
     return;
   }
-
 }
 
 void gotFrame2003(CAN_FRAME *frame) {
-
   // Only updates values if system is in Display mode
   if (diagnostics_mode == 0) {
     // Gear
@@ -74,5 +69,4 @@ void gotFrame2003(CAN_FRAME *frame) {
     update_gear(gear);
     return;
   }
-
 }

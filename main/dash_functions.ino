@@ -1,6 +1,6 @@
 #include "dash_functions.h"
 
-int fuel_start, oil_start, cool_start,can_id_start,can_value_start;
+int cool_start;
 
 // Show gauges
 void setup_screen(){
@@ -21,7 +21,7 @@ void setup_display_mode(){
   write_word("rpm\n",30,200,1,1,1,24);
   write_word("Gear\n",125,130,1,1,1,24);
   
-  if (MPH == 0) {
+  if (configuration.speed_units == MPH) {
     write_word("mph\n",30,80,1,1,1,24);
   }
   else {
@@ -29,24 +29,49 @@ void setup_display_mode(){
   }
 }
 
-// TODO: Needs to be updated to write more than one can id
-void update_diagnostics(int can_id, uint8_t *buff, buff_length){
-    
-  // Currently clears everything
-  clear_area(0,0,SOURCE,GATE);
-    
-  char id[5]; 
-  sprintf(can_id, "%d\n", level);
-  write_word(id,can_id_start,0,1,1,1,24);
-
-  char value[buff_length+1];
-  for (int i = 0; i<buff_length; i++){
-    value[i] = sprintf(can_id, "%d", buff[i]);
-  }
-  value[buff_length+1] = '\n';
-  write_word(value,can_value_start,0,1,1,1,24);
+void setup_diagnostics_mode(){
+  set_page(0);
 }
-   
+
+void set_page(int page_number){
+  // Clears whole screen
+  clear_area(0,0,SOURCE,GATE);
+  
+  if (page_number <= MAX_CAN_PAGES){
+    for (int i = 0; i < CAN_IDS_PER_PAGE; i++){
+      char id[8*4];
+      sprintf(id, "%04x\n", configuration.can_pages[page_number][i]);
+      write_word(id,CAN_ID_START,20,1,1,1,24);
+    }
+  }
+
+  current_page = page_number;
+}
+
+void update_diagnostics(CAN_FRAME *frame){
+
+  int location_on_page = -1;
+
+  if (current_page != configuration.num_pages-1) {
+    for (int i = 0; i < CAN_IDS_PER_PAGE; i++) {
+      if (configuration.can_pages[current_page][i] == frame->id) {
+        location_on_page = i;
+        break;
+      }
+    }
+    return;
+  }
+
+  char value[frame->length+1];
+  for (int i = 0; i<frame->length; i++){
+    sprintf(&value[2*i], "%02x", frame->data.bytes[i]);
+  }
+  value[frame->length+1] = '\n';
+
+  clear_area(CAN_VALUE_START,(location_on_page+1)*30,CAN_VALUE_START+24,GATE);
+  write_word(value,CAN_VALUE_START,(location_on_page+1)*30,1,1,1,24);
+}
+
 void update_cool(int level){
   clear_area(cool_start,130,SOURCE-cool_start,24);
 
@@ -67,7 +92,7 @@ void update_cool(int level){
 void update_speed(int level){
   int speed = level;
 
-  if (MPH == 0) {
+  if (configuration.speed_units == MPH) {
     float conversion_factor = 0.62137;
     int speed = (int) level*conversion_factor;
   }
