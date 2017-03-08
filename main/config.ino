@@ -1,7 +1,6 @@
 #include "config.h"
 
 void setup_config() {
-  /*
   Serial.begin(9600);
   delay(500);
 
@@ -10,9 +9,11 @@ void setup_config() {
   if (first_run) {
     configuration.cool_threshold = COOL_THRESHOLD;
     configuration.speed_units = MPH;
-    int temp[NUM_CAN_IDS] = CAN_IDS;
-    memcpy(configuration.can_ids, temp, sizeof(temp));
+    configuration.num_pages = MAX_CAN_PAGES;
     configuration.num_can_ids = NUM_CAN_IDS;
+    
+    int temp[CAN_IDS_PER_PAGE][MAX_CAN_PAGES] = CAN_IDS; // Default CAN IDs
+    memcpy(configuration.can_pages, temp, sizeof(temp));
 
     uint8_t b2[sizeof(Configuration)]; 
     memcpy(b2, &configuration, sizeof(Configuration)); 
@@ -24,7 +25,6 @@ void setup_config() {
     uint8_t* b = dueFlashStorage.readAddress(CONFIG_ADDR); 
     memcpy(&configuration, b, sizeof(Configuration));
   }
-  */
 }
 
 void update_config(){

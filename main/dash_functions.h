@@ -1,4 +1,4 @@
-#ifndef DASH_FUNCTIONS_H_  
+  #ifndef DASH_FUNCTIONS_H_  
 #define DASH_FUNCTIONS_H_
 
 #include "Display_driver.h"

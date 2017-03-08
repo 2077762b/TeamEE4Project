@@ -18,11 +18,11 @@ void setup_display_mode(){
   // Setup labels on screen
   clear_area(0,0,SOURCE,GATE);
   cool_start = write_word("Cool:\n",200,130,1,1,1,24);
-  write_word("rpm\n",30,200,1,1,1,24);
-  write_word("Gear\n",125,130,1,1,1,24);
+  write_word("rpm\n",15,210,1,1,1,24);
+  write_word("Gear\n",120,130,1,1,1,24);
   
   if (configuration.speed_units == MPH) {
-    write_word("mph\n",30,80,1,1,1,24);
+    write_word("mph\n",15,80,1,1,1,24);
   }
   else {
     write_word("kph\n",30,80,1,1,1,24);
@@ -49,9 +49,7 @@ void set_page(int page_number){
 }
 
 void update_diagnostics(CAN_FRAME *frame){
-
   int location_on_page = -1;
-
   if (current_page != configuration.num_pages-1) {
     for (int i = 0; i < CAN_IDS_PER_PAGE; i++) {
       if (configuration.can_pages[current_page][i] == frame->id) {
@@ -61,6 +59,8 @@ void update_diagnostics(CAN_FRAME *frame){
     }
     return;
   }
+
+  Serial.print(location_on_page);
 
   char value[frame->length+1];
   for (int i = 0; i<frame->length; i++){
@@ -99,33 +99,41 @@ void update_speed(int level){
   
   clear_area(15,20,95,48);
 
-  // Make sure only 3 digits
-  if (speed > 999) speed = 999;
+  char str[5];
 
-  char str[5]; 
-  sprintf(str, "%d\n", speed);
+  // Make sure only 3 digits
+  if (speed > 99) {
+    sprintf(str, "%03d\n", speed);
+  }
+  else if (speed > 9) {
+    sprintf(str, "%02d\n", speed);
+  }
+  else {
+    sprintf(str, "%01d\n", speed);
+  }
+
   write_word(str,15,20,1,1,1,48);
 }
 
 void update_rpm(int level){
-  clear_area(15,140,95,48);
+  clear_area(15,160,95,48);
 
   // Make sure only 3 digits
   if (level > 999) level = 999;
 
   char str[5]; 
-  sprintf(str, "%d\n", level);
-  write_word(str,15,140,1,1,1,48);
+  sprintf(str, "%05d\n", level);
+  write_word(str,15,160,1,1,1,48);
 }
 
 void update_gear(int level){
-   clear_area(115,20,67,96);
+  clear_area(115,20,67,96);
 
-  // Make sure only 3 digits
-  if (level > 999) level = 999;
+  // Make sure only 1 digit
+  if (level > 9) level = 9;
 
-  char str[5]; 
-  sprintf(str, "%d\n", level);
+  char str[5];
+  sprintf(str, "%01d\n", level);
   write_word(str,115,20,1,1,1,96);
 }
 

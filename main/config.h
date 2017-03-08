@@ -16,7 +16,7 @@ DueFlashStorage dueFlashStorage;
 typedef struct configuration {
   int cool_threshold;
   int speed_units; 
-  int can_pages[6][MAX_CAN_PAGES];
+  int can_pages[CAN_IDS_PER_PAGE][MAX_CAN_PAGES];
   int num_pages;
   int num_can_ids;
 } Configuration;
