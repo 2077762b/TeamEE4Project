@@ -11,6 +11,8 @@
 #define ID_5 0x2004 // Ana1 mV - Ana2 mV - Ana3 mV - Cam Advance x 10 
 #define ID_6 0x2005 // Cam Targ x 10 - Cam PWM x 10 - Crank Errors - Cam Error
 
+#define TEST_ID 0x6969
+
 void setup_can();
 
 #endif

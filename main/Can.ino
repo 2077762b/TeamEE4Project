@@ -18,18 +18,19 @@ void printFrame(CAN_FRAME *frame, int filter) {
 void setup_can(){
   Can0.begin(CAN_BPS_250K);
   
-  if (diagnostics_mode == 0) {    
-    Can0.setRXFilter(1, ID_1, 0x1FFFFFFF, true);
-    Can0.setRXFilter(2, ID_2, 0x1FFFFFFF, true);
-    Can0.setRXFilter(3, ID_4, 0x1FFFFFFF, true);
-    Can0.setCallback(1, gotFrame2000);
-    Can0.setCallback(2, gotFrame2001);
-    Can0.setCallback(3, gotFrame2003);
-  }
-  else {
-    Can0.setRXFilter(4, 0, 0, true); //catch all mailboxes
-    Can0.setCallback(4, gotFrame);
-  }
+  Can0.setRXFilter(1, ID_1, 0x1FFFFFFF, true);
+  Can0.setRXFilter(2, ID_2, 0x1FFFFFFF, true);
+  Can0.setRXFilter(3, ID_4, 0x1FFFFFFF, true);
+  Can0.attachCANInterrupt(1, gotFrame2000);
+  Can0.attachCANInterrupt(2, gotFrame2001);
+  Can0.attachCANInterrupt(3, gotFrame2003);
+
+  Can0.setRXFilter(4, 0, 0, true); //catch all mailboxes
+  Can0.attachCANInterrupt(4, gotFrame);
+}
+
+void disable_can(){
+  Can0.disable();
 }
 
 void gotFrame(CAN_FRAME *frame){
@@ -67,8 +68,8 @@ void gotFrame2001(CAN_FRAME *frame) {
 void gotFrame2003(CAN_FRAME *frame) {
   printFrame(frame, 1);
 
-    // Gear
-    int16_t gear = (frame->data.byte[1]<<8) | frame->data.byte[0];
-    update_gear(gear);
-    return;
+  // Gear
+  int16_t gear = (frame->data.byte[1]<<8) | frame->data.byte[0];
+  update_gear(gear);
+  return;
 }

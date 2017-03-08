@@ -9,10 +9,11 @@ void setup_config() {
   if (first_run) {
     configuration.cool_threshold = COOL_THRESHOLD;
     configuration.speed_units = MPH;
-    configuration.num_pages = MAX_CAN_PAGES;
+    configuration.max_num_pages = MAX_NUM_PAGES;
     configuration.num_can_ids = NUM_CAN_IDS;
+    configuration.can_ids_per_page = CAN_IDS_PER_PAGE;
     
-    int temp[CAN_IDS_PER_PAGE][MAX_CAN_PAGES] = CAN_IDS; // Default CAN IDs
+    int temp[CAN_IDS_PER_PAGE][MAX_NUM_PAGES] = CAN_IDS; // Default CAN IDs
     memcpy(configuration.can_pages, temp, sizeof(temp));
 
     uint8_t b2[sizeof(Configuration)]; 

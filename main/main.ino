@@ -10,6 +10,18 @@ void setup()
 {
   setup_screen();
   setup_config();
+
+
+  diagnostics_mode = 1;
+
+  if (!diagnostics_mode) {
+    setup_display_mode();
+  }
+  else {
+    setup_diagnostics_mode();
+  }
+  
+  setup_can();
   
   /*
   delay(1000);
@@ -31,18 +43,64 @@ void setup()
     setup_can();
     setup_display_mode();
   }
-
   */
-  
+
+  CAN_FRAME output1;
+  output1.id = ID_1;
+  output1.length = 8;
+  output1.extended = 1;
+  output1.data.bytes[0] = 0x65; // RPM
+  output1.data.bytes[1] = 0x65; // RPM
+  output1.data.bytes[2] = 0x65;
+  output1.data.bytes[3] = 0x65;
+  output1.data.bytes[4] = 0x65; // COOLANT
+  output1.data.bytes[5] = 0x65; // COOLANT
+  output1.data.bytes[6] = 0x65;
+  output1.data.bytes[7] = 0x65;
+
+  CAN_FRAME output2;
+  output2.id = ID_2;
+  output2.length = 8;
+  output2.extended = 1;
+  output2.data.bytes[0] = 0x65;
+  output2.data.bytes[1] = 0x00;
+  output2.data.bytes[2] = 0x00;
+  output2.data.bytes[3] = 0x00;
+  output2.data.bytes[4] = 0x00; // SPEED
+  output2.data.bytes[5] = 0x00; // SPEED
+  output2.data.bytes[6] = 0x00;
+  output2.data.bytes[7] = 0x00;
+
+  CAN_FRAME output3;
+  output3.id = TEST_ID;
+  output3.length = 8;
+  output3.extended = 1;
+  output3.data.bytes[0] = 0x00; // GEAR
+  output3.data.bytes[1] = 0x00; // GEAR
+  output3.data.bytes[2] = 0x00;
+  output3.data.bytes[3] = 0x00;
+  output3.data.bytes[4] = 0x00;
+  output3.data.bytes[5] = 0x00;
+  output3.data.bytes[6] = 0x00;
+  output3.data.bytes[7] = 0x00;
+
+  update_diagnostics(&output1);
+  update_diagnostics(&output2);
+  update_diagnostics(&output3);
+
+  delay(10000);
+
+  set_page(1);
+
+  delay(4000);
+
+  update_diagnostics(&output3);
 }
 
 void loop() {
-
   //update_config();
 
-  diagnostics_mode = 1;
-  setup_can();
-  
+  /*
   Can1.begin(CAN_BPS_250K);
   CAN_FRAME output1;
   output1.id = ID_1;
@@ -93,7 +151,7 @@ void loop() {
   output3.data.bytes[7] = 0x00;
   Can1.sendFrame(output3);
   delay(10000);
-
+  */
 }
 
 

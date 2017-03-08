@@ -33,43 +33,61 @@ void setup_diagnostics_mode(){
   set_page(0);
 }
 
-void set_page(int page_number){
-  // Clears whole screen
-  clear_area(0,0,SOURCE,GATE);
-  
-  if (page_number <= MAX_CAN_PAGES){
-    for (int i = 0; i < CAN_IDS_PER_PAGE; i++){
-      char id[8*4];
-      sprintf(id, "%04x\n", configuration.can_pages[page_number][i]);
-      write_word(id,CAN_ID_START,20,1,1,1,24);
-    }
-  }
+int is_last_page(int page_number){
+  return page_number == configuration.num_can_ids/configuration.can_ids_per_page;
+}
 
-  current_page = page_number;
+void set_page(int page_number){
+  if (page_number <= configuration.max_num_pages){
+    // Clears whole screen
+    clear_area(0,0,SOURCE,GATE);
+    
+    int maximum_ids = configuration.can_ids_per_page;
+    
+    // Don't print everything if on last page
+    if (is_last_page(page_number)) {
+      maximum_ids = configuration.num_can_ids%configuration.can_ids_per_page;
+    }
+
+    Serial.print(maximum_ids);
+    
+    for (int location_on_page = 0; location_on_page < maximum_ids; location_on_page++){
+      char id[8*4];
+      sprintf(id, "%04x\n", configuration.can_pages[page_number][location_on_page]);
+      write_word(id,CAN_ID_START,(34*location_on_page+20),1,1,1,24);
+    }
+    current_page = page_number;
+  }
 }
 
 void update_diagnostics(CAN_FRAME *frame){
   int location_on_page = -1;
-  if (current_page != configuration.num_pages-1) {
-    for (int i = 0; i < CAN_IDS_PER_PAGE; i++) {
-      if (configuration.can_pages[current_page][i] == frame->id) {
-        location_on_page = i;
-        break;
-      }
+  int maximum_ids = configuration.can_ids_per_page;
+
+  // Don't print everything if on last page
+  if (is_last_page(current_page)) {
+    maximum_ids = configuration.num_can_ids%configuration.can_ids_per_page;
+  }
+
+  for (int i = 0; i < maximum_ids; i++) {
+    if (configuration.can_pages[current_page][i] == frame->id) {
+      location_on_page = i;
+      break;
     }
+  }
+
+  if (location_on_page == -1) {
     return;
   }
 
-  Serial.print(location_on_page);
-
-  char value[frame->length+1];
+  char value[2*frame->length+1];
   for (int i = 0; i<frame->length; i++){
     sprintf(&value[2*i], "%02x", frame->data.bytes[i]);
   }
-  value[frame->length+1] = '\n';
+  value[2*frame->length+1] = '\n';
 
-  clear_area(CAN_VALUE_START,(location_on_page+1)*30,CAN_VALUE_START+24,GATE);
-  write_word(value,CAN_VALUE_START,(location_on_page+1)*30,1,1,1,24);
+  clear_area(CAN_VALUE_START,(34*location_on_page+20),24,GATE-CAN_VALUE_START);
+  write_word(value,CAN_VALUE_START,(34*location_on_page+20),1,1,1,24);
 }
 
 void update_cool(int level){
@@ -80,7 +98,7 @@ void update_cool(int level){
 
   // Warning colour
   int r = 0, g = 0;
-  if (level > COOL_THRESHOLD) r = 1;
+  if (level > configuration.cool_threshold) r = 1;
   else g = 1;
   set_coolant(r);
 
@@ -116,12 +134,12 @@ void update_speed(int level){
 }
 
 void update_rpm(int level){
-  clear_area(15,160,95,48);
+  clear_area(15,160,160,48);
 
   // Make sure only 3 digits
   if (level > 999) level = 999;
 
-  char str[5]; 
+  char str[6];
   sprintf(str, "%05d\n", level);
   write_word(str,15,160,1,1,1,48);
 }
