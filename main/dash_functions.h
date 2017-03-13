@@ -8,12 +8,13 @@
 #include "coolant.h"
 #include "config.h"
 
-#define CAN_ID_START 30
-#define CAN_VALUE_START 110
+#define CAN_ID_START 25
+#define CAN_VALUE_START 105
+#define MAX_FRAME_SIZE 16
 
 void setup_screen();
 
-void set_page(int page_number);
+void setup_page(int page_number);
 void update_diagnostics(CAN_FRAME frame);
 
 void update_cool(int level);

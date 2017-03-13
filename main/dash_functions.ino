@@ -30,14 +30,14 @@ void setup_display_mode(){
 }
 
 void setup_diagnostics_mode(){
-  set_page(0);
+  setup_page(0);
 }
 
 int is_last_page(int page_number){
   return page_number == configuration.num_can_ids/configuration.can_ids_per_page;
 }
 
-void set_page(int page_number){
+void setup_page(int page_number){
   if (page_number <= configuration.max_num_pages){
     // Clears whole screen
     clear_area(0,0,SOURCE,GATE);
@@ -45,9 +45,8 @@ void set_page(int page_number){
     int maximum_ids = configuration.can_ids_per_page;
     
     // Don't print everything if on last page
-    if (is_last_page(page_number)) {
-      maximum_ids = configuration.num_can_ids%configuration.can_ids_per_page;
-    }
+    if (is_last_page(page_number)) maximum_ids = configuration.num_can_ids%configuration.can_ids_per_page;
+    
 
     Serial.print(maximum_ids);
     
@@ -65,9 +64,7 @@ void update_diagnostics(CAN_FRAME *frame){
   int maximum_ids = configuration.can_ids_per_page;
 
   // Don't print everything if on last page
-  if (is_last_page(current_page)) {
-    maximum_ids = configuration.num_can_ids%configuration.can_ids_per_page;
-  }
+  if (is_last_page(current_page)) maximum_ids = configuration.num_can_ids%configuration.can_ids_per_page;
 
   for (int i = 0; i < maximum_ids; i++) {
     if (configuration.can_pages[current_page][i] == frame->id) {
@@ -76,17 +73,12 @@ void update_diagnostics(CAN_FRAME *frame){
     }
   }
 
-  if (location_on_page == -1) {
-    return;
-  }
+  if (location_on_page == -1) return;
 
-  char value[2*frame->length+1];
-  for (int i = 0; i<frame->length; i++){
-    sprintf(&value[2*i], "%02x", frame->data.bytes[i]);
-  }
-  value[2*frame->length+1] = '\n';
+  char value[MAX_FRAME_SIZE+1];
+  sprintf(value,"%08x%08x\n", frame->data.high,frame->data.low);
 
-  clear_area(CAN_VALUE_START,(34*location_on_page+20),24,GATE-CAN_VALUE_START);
+  clear_area(CAN_VALUE_START,(34*location_on_page+20),SOURCE-CAN_VALUE_START,24);
   write_word(value,CAN_VALUE_START,(34*location_on_page+20),1,1,1,24);
 }
 
