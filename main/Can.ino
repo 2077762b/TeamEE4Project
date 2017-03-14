@@ -17,24 +17,19 @@ void printFrame(CAN_FRAME *frame, int filter) {
 
 void setup_can(){
   Can0.begin(CAN_BPS_250K);
-  
+}
+
+void setup_can_display(){
   Can0.setRXFilter(1, ID_1, 0x1FFFFFFF, true);
   Can0.setRXFilter(2, ID_2, 0x1FFFFFFF, true);
   Can0.setRXFilter(3, ID_4, 0x1FFFFFFF, true);
-  Can0.setRXFilter(4, 0, 0, true); //catch all mailbox
-}
-
-void setup_can_normal(){
   Can0.attachCANInterrupt(1, gotFrame2000);
   Can0.attachCANInterrupt(2, gotFrame2001);
   Can0.attachCANInterrupt(3, gotFrame2003);
-  Can0.attachCANInterrupt(4, NULL);
 }
 
-void setup_can_diagnostic(){
-  Can0.attachCANInterrupt(1, gotFrame);
-  Can0.attachCANInterrupt(2, gotFrame);
-  Can0.attachCANInterrupt(3, gotFrame);
+void setup_can_diagnostics(){
+  Can0.setRXFilter(4, 0, 0, true); //catch all IDs
   Can0.attachCANInterrupt(4, gotFrame);
 }
 
@@ -49,7 +44,9 @@ void gotFrame(CAN_FRAME *frame){
 }
 
 // Only updates values if system is in Display mode
-void gotFrame2000(CAN_FRAME *frame) { 
+void gotFrame2000(CAN_FRAME *frame) {
+  printFrame(frame, 2000);
+  
   // RPM
   int16_t RPM = (frame->data.byte[1]<<8) | frame->data.byte[0];
   update_rpm(RPM);
@@ -61,6 +58,7 @@ void gotFrame2000(CAN_FRAME *frame) {
 
 // Only updates values if system is in Display mode
 void gotFrame2001(CAN_FRAME *frame) {
+  printFrame(frame, 2001);
   
   // Speed
   int16_t speed = (frame->data.byte[5]<<8) | frame->data.byte[4];
@@ -70,6 +68,7 @@ void gotFrame2001(CAN_FRAME *frame) {
 
 // Only updates values if system is in Display mode
 void gotFrame2003(CAN_FRAME *frame) {
+  printFrame(frame, 2003);
 
   // Gear
   int16_t gear = (frame->data.byte[1]<<8) | frame->data.byte[0];

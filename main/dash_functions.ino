@@ -47,9 +47,6 @@ void setup_page(int page_number){
     // Don't print everything if on last page
     if (is_last_page(page_number)) maximum_ids = configuration.num_can_ids%configuration.can_ids_per_page;
     
-
-    Serial.print(maximum_ids);
-    
     for (int location_on_page = 0; location_on_page < maximum_ids; location_on_page++){
       char id[8*4];
       sprintf(id, "%04x\n", configuration.can_pages[page_number][location_on_page]);
@@ -85,17 +82,19 @@ void update_diagnostics(CAN_FRAME *frame){
 void update_cool(int level){
   clear_area(cool_start,130,SOURCE-cool_start,24);
 
+  int coolant = level;
+
   // Make sure only 3 digits
-  if (level > 999) level = 999;
+  if (coolant > 999) coolant = 999;
 
   // Warning colour
   int r = 0, g = 0;
-  if (level > configuration.cool_threshold) r = 1;
+  if (coolant > configuration.cool_threshold) r = 1;
   else g = 1;
   set_coolant(r);
 
   char str[5]; 
-  sprintf(str, "%d'C\n", level);
+  sprintf(str, "%d'C\n", coolant);
   write_word(str,cool_start,130,r,g,0,24);
 }
 
@@ -109,10 +108,14 @@ void update_speed(int level){
   
   clear_area(15,20,95,48);
 
-  char str[5];
+  char str[4];
 
   // Make sure only 3 digits
-  if (speed > 99) {
+  if (speed > 999) {
+    speed = 999;
+    sprintf(str, "%03d\n", speed);
+  }
+  else if (speed > 99) {
     sprintf(str, "%03d\n", speed);
   }
   else if (speed > 9) {
@@ -128,22 +131,27 @@ void update_speed(int level){
 void update_rpm(int level){
   clear_area(15,160,160,48);
 
-  // Make sure only 3 digits
-  if (level > 999) level = 999;
-
+  int rpm = level;
+  
+  // Make sure only 5 digits
+  if (rpm > 99999) {
+    rpm = 99999;
+  }
+  
   char str[6];
-  sprintf(str, "%05d\n", level);
+  sprintf(str, "%05d\n", rpm);
   write_word(str,15,160,1,1,1,48);
 }
 
 void update_gear(int level){
   clear_area(115,20,67,96);
+  int gear = level;
 
   // Make sure only 1 digit
-  if (level > 9) level = 9;
+  if (gear > 9) gear = 9;
 
-  char str[5];
-  sprintf(str, "%01d\n", level);
+  char str[2];
+  sprintf(str, "%1d\n", gear);
   write_word(str,115,20,1,1,1,96);
 }
 

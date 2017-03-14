@@ -11,12 +11,20 @@ void setup()
   setup_config();
   setup_can();
 
-  diagnostics_mode = 1;
+  diagnostics_mode = 0;
 
-  if (!diagnostics_mode) setup_display_mode();
-  else setup_diagnostics_mode();
+  if (!diagnostics_mode) {
+    setup_display_mode();
+    setup_can_display();
+  }
+  else {
+    setup_diagnostics_mode();
+    setup_can_diagnostics();
+  }
   
   /*
+   * CODE FOR ENABLING DIAGNOSTICS MODE ON STARTUP
+   * 
   delay(1000);
   if (BOTH_BUTTONS_ARE_PUSHED) {
     diagnostics_mode = 1;
@@ -38,6 +46,9 @@ void setup()
   }
   */
 
+  /*
+   * DIAGNOSTICS MODE TEST:
+   * 
   CAN_FRAME output1;
   output1.id = ID_1;
   output1.length = 8;
@@ -51,55 +62,39 @@ void setup()
   output1.data.bytes[6] = 0xAB;
   output1.data.bytes[7] = 0xED;
 
-  CAN_FRAME output2;
-  output2.id = ID_2;
-  output2.length = 8;
-  output2.extended = 1;
-  output2.data.bytes[0] = 0x44;
-  output2.data.bytes[1] = 0x44;
-  output2.data.bytes[2] = 0x44;
-  output2.data.bytes[3] = 0x44;
-  output2.data.bytes[4] = 0x44; // SPEED
-  output2.data.bytes[5] = 0x44; // SPEED
-  output2.data.bytes[6] = 0x44;
-  output2.data.bytes[7] = 0x44;
-
-  CAN_FRAME output3;
-  output3.id = TEST_ID;
-  output3.length = 8;
-  output3.extended = 1;
-  output3.data.value = 0;
-
   update_diagnostics(&output1);
-  update_diagnostics(&output2);
-  output3.id = ID_4;
-  update_diagnostics(&output3);
-  output3.id = ID_5;
-  update_diagnostics(&output3);
-  output3.id = ID_6;
-  update_diagnostics(&output3);
-  
-  CAN_FRAME output4;
-  output4.id = ID_3;
-  output4.length = 8;
-  output4.extended = 1;
-  for (uint64_t i = 0; i < 2^64; i++){
-    output4.data.value = i;
-    update_diagnostics(&output4);   
-    delay(100);
-  }
-  
+  output1.id = TEST_ID;
+  update_diagnostics(&output1);
+  output1.id = ID_4;
+  update_diagnostics(&output1);
+  output1.id = ID_5;
+  update_diagnostics(&output1);
+  output1.id = ID_6;
+  update_diagnostics(&output1);
 
+  delay(2000);
+
+  setup_page(1);
+  
+  delay(2000);
+
+  output1.id = TEST_ID;
+  update_diagnostics(&output1);
+
+  delay(2000);
+
+  diagnostics_mode = 1;
+  setup_display_mode();
+
+  */
 
 }
 
 void loop() {
   // update_config();
 
-  /*
   Can1.begin(CAN_BPS_250K);
   CAN_FRAME output1;
-  output1.id = ID_1;
   output1.length = 8;
   output1.extended = 1;
 
@@ -111,43 +106,23 @@ void loop() {
   output1.data.bytes[5] = count; // COOLANT
   output1.data.bytes[6] = count;
   output1.data.bytes[7] = count;
+
+  output1.id = ID_1;
+  Can1.sendFrame(output1);
+  delay(100);
+
+  output1.id = ID_2;
+  Can1.sendFrame(output1);
+  delay(100);
+
+  output1.id = ID_4;
   Can1.sendFrame(output1);
   delay(100);
 
   count++;
 
-  CAN_FRAME output2;
-  output2.id = ID_2;
-  output2.length = 8;
-  output2.extended = 1;
+  delay(500);
 
-  output2.data.bytes[0] = 0x00;
-  output2.data.bytes[1] = 0x00;
-  output2.data.bytes[2] = 0x00;
-  output2.data.bytes[3] = 0x00;
-  output2.data.bytes[4] = 0x00; // SPEED
-  output2.data.bytes[5] = 0x00; // SPEED
-  output2.data.bytes[6] = 0x00;
-  output2.data.bytes[7] = 0x00;
-  Can1.sendFrame(output2);
-  delay(100);
-
-  CAN_FRAME output3;
-  output3.id = ID_4;
-  output3.length = 8;
-  output3.extended = 1;
-
-  output3.data.bytes[0] = 0x00; // GEAR
-  output3.data.bytes[1] = 0x00; // GEAR
-  output3.data.bytes[2] = 0x00;
-  output3.data.bytes[3] = 0x00;
-  output3.data.bytes[4] = 0x00;
-  output3.data.bytes[5] = 0x00;
-  output3.data.bytes[6] = 0x00;
-  output3.data.bytes[7] = 0x00;
-  Can1.sendFrame(output3);
-  delay(10000);
-  */
 }
 
 
