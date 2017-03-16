@@ -153,9 +153,10 @@ void update_rpm(int level){
   }
 
   // Set RPM LEDs
-  int num_leds = configuration.max_rpm/level;
+  float percent = (1.0*level) / configuration.max_rpm;
+  int num_leds = percent * NUM_LEDS;
   set_leds(num_leds);
-  
+  Serial.print(percent);
   char str[6];
   sprintf(str, "%05d\n", level);
   write_word(str,15,160,1,1,1,48);

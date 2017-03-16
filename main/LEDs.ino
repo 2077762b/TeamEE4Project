@@ -20,14 +20,16 @@ int set_leds (int num_leds) {
     strip.setPixelColor(i, 0);
   }
   
-  uint32_t color = 0xFF0000;      // 'On' color (starts green)
-  int number_green = int(NUM_LEDS * 0.7) - 1;
-  
   for (int i = 0; i < num_leds; i++) {
-    if (i > number_green) {
-      color = 0x00FF00;
+    if (i < NUM_GREEN) {
+      strip.setPixelColor(i, GREEN);
     }
-    strip.setPixelColor(i, color);
+    else if (i < NUM_GREEN + NUM_RED) {
+      strip.setPixelColor(i, RED);
+    }
+    else{
+      strip.setPixelColor(i, BLUE);
+    }
   }
   
   strip.show();                     // Refresh strip
