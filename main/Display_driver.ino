@@ -8,7 +8,7 @@ void Write_Command(char cmd){
 }
 
 void Write_Parameter(char data){
-    PIOC->PIO_SODR =                                                                                                                                                     ;     // DC = 1 (data)
+    PIOC->PIO_SODR = DC;     // DC = 1 (data)
     PIOC->PIO_CODR = 0x000001fe;
     PIOC->PIO_SODR = data << 1;
     PIOC->PIO_CODR = WR;     // WR = 0 (write)
