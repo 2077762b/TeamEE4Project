@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define outfile "coolant.h"
+#define outfile "uog.h"
 
 int main(int argc, char *argv[]){
 

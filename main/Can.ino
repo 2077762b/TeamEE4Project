@@ -20,16 +20,16 @@ void setup_can(){
 }
 
 void setup_can_display(){
-  Can0.setRXFilter(1, ID_1, 0x1FFFFFFF, true);
-  Can0.setRXFilter(2, ID_2, 0x1FFFFFFF, true);
-  Can0.setRXFilter(3, ID_4, 0x1FFFFFFF, true);
-  Can0.attachCANInterrupt(1, gotFrame2000);
-  Can0.attachCANInterrupt(2, gotFrame2001);
-  Can0.attachCANInterrupt(3, gotFrame2003);
+  Can0.setRXFilter(0, ID_1, 0x1FFFFFFF, true);
+  Can0.setRXFilter(1, ID_2, 0x1FFFFFFF, true);
+  Can0.setRXFilter(2, ID_4, 0x1FFFFFFF, true);
+  Can0.attachCANInterrupt(0, gotFrame2000);
+  Can0.attachCANInterrupt(1, gotFrame2001);
+  Can0.attachCANInterrupt(2, gotFrame2003);
 }
 
 void setup_can_diagnostics(){
-  Can0.setRXFilter(1, 0, 0, true); //catch all IDs
+  Can0.setRXFilter(0, 0, true); //catch all IDs
   Can0.setGeneralCallback(gotFrame);
 }
 

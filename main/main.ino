@@ -2,8 +2,9 @@
 #include "config.h"
 #include "Can.h"
 
-int diagnostics_mode = 0;
+int diagnostics_mode;
 int count = 0;
+int gearCount = 0;
 
 void setup()
 {
@@ -11,7 +12,7 @@ void setup()
   setup_config();
   setup_can();
 
-  diagnostics_mode = 1;
+  diagnostics_mode = 0;
 
   if (diagnostics_mode) {
     setup_diagnostics_mode();
@@ -95,24 +96,31 @@ void loop() {
 
   Can1.begin(CAN_BPS_250K);
   
-  CAN_FRAME output1;
-  output1.length = 8;
-  output1.extended = 1;
-
-  output1.data.bytes[0] = count; // RPM
-  output1.data.bytes[1] = count; // RPM
-  output1.data.bytes[2] = count;
-  output1.data.bytes[3] = count;
-  output1.data.bytes[4] = count; // COOLANT
-  output1.data.bytes[5] = count; // COOLANT
-  output1.data.bytes[6] = count;
-  output1.data.bytes[7] = count;
+  CAN_FRAME output1, output2, output3;
 
   output1.id = ID_1;
+  output1.length = 8;
+  output1.extended = 1;
+  output1.data.s0 = count; // RPM
+  output1.data.s2 = count%120; // COOLANT
+  
+  output2.id = ID_2;
+  output2.length = 8;
+  output2.extended = 1;
+  output2.data.s2 = (count*10)%150; // Speed
 
+  output3.id = ID_4;
+  output3.length = 8;
+  output3.extended = 1;
+  output3.data.s0 = count%6; // Gear
+  
   Can1.sendFrame(output1);
-  delay(100);
-
+  delay(30);
+  Can1.sendFrame(output2);
+  delay(30);
+  Can1.sendFrame(output3);
+  delay(30);
+  
   count++;
 
   Serial.print(count);

@@ -17,7 +17,7 @@ void setup_screen(){
 void setup_display_mode(){
   // Setup labels on screen
   clear_area(0,0,SOURCE,GATE);
-  cool_start = write_word("Cool:\n",200,130,1,1,1,24);
+  cool_start = write_word("Cool:\n",200,20,1,1,1,24);
   write_word("rpm\n",15,210,1,1,1,24);
   write_word("Gear\n",120,130,1,1,1,24);
   
@@ -80,7 +80,7 @@ void update_diagnostics(CAN_FRAME *frame){
 }
 
 void update_cool(int level){
-  clear_area(cool_start,130,SOURCE-cool_start,24);
+  clear_area(cool_start,20,SOURCE-cool_start,24);
 
   int coolant = level;
 
@@ -95,7 +95,7 @@ void update_cool(int level){
 
   char str[5]; 
   sprintf(str, "%d'C\n", coolant);
-  write_word(str,cool_start,130,r,g,0,24);
+  write_word(str,cool_start,20,r,g,0,24);
 }
 
 void update_speed(int level){
@@ -154,7 +154,7 @@ void update_gear(int level){
 }
 
 void set_coolant(int state){
-  if (state) display_ppm_image(190,175,48,48,coolant_image);
-  else clear_area(190,175,48,48);
+  if (1) display_ppm_image(200,60,48,48,coolant_image);
+  else clear_area(200,60,48,48);
 }
 
