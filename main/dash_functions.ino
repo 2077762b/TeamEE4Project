@@ -163,18 +163,18 @@ void update_rpm(int level){
 }
 
 void update_gear(int level){
-  clear_area(122,20,67,96);
+  clear_area(112,20,67,96);
 
   // Make sure only 1 digit
   if (level > 9 || level < 0) level = 0;
 
   char str[2];
   sprintf(str, "%1d\n", level);
-  write_word(str,122,20,1,1,1,96);
+  write_word(str,112,20,1,1,1,96);
 }
 
 void set_coolant(int state){
-  if (1) display_ppm_image(230,100,48,48,coolant_image);
+  if (state) display_ppm_image(230,100,48,48,coolant_image);
   else clear_area(230,100,48,48);
 }
 
