@@ -131,11 +131,13 @@ void update_rpm(int level){
   clear_area(15,160,165,48);
   
   // Make sure only 5 digits
-  if (level > 99999 || level < 0) {
+  if (level > configuration.max_rpm || level < 0) {
     level = 99999;
   }
 
   // Set RPM LEDs
+  int num_leds = configuration.max_rpm/level;
+  set_leds(num_leds);
   
   char str[6];
   sprintf(str, "%05d\n", level);

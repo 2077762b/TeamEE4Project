@@ -1,6 +1,7 @@
 #include "dash_functions.h"
 #include "config.h"
 #include "Can.h"
+#include "LEDs.h"
 
 int diagnostics_mode;
 int count = 0;
@@ -11,6 +12,7 @@ void setup()
   setup_screen();
   setup_config();
   setup_can();
+  setup_leds();
 
   diagnostics_mode = 0;
 

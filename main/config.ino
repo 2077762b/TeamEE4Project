@@ -12,6 +12,7 @@ void setup_config() {
     configuration.max_num_pages = MAX_NUM_PAGES;
     configuration.num_can_ids = NUM_CAN_IDS;
     configuration.can_ids_per_page = CAN_IDS_PER_PAGE;
+    configuration.max_rpm = MAX_RPM;
     
     int temp[CAN_IDS_PER_PAGE][MAX_NUM_PAGES] = CAN_IDS; // Default CAN IDs
     memcpy(configuration.can_pages, temp, sizeof(temp));

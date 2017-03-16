@@ -5,6 +5,7 @@
 DueFlashStorage dueFlashStorage;
 
 #define COOL_THRESHOLD 80
+#define MAX_RPM 6000
 #define MPH 1
 #define KPH 0
 #define CONFIG_ADDR 4
@@ -15,7 +16,8 @@ DueFlashStorage dueFlashStorage;
 
 typedef struct configuration {
   int cool_threshold;
-  int speed_units; 
+  int speed_units;
+  int max_rpm;
   int can_pages[MAX_NUM_PAGES][CAN_IDS_PER_PAGE];
   int max_num_pages;
   int num_can_ids;
