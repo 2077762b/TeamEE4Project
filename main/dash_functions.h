@@ -22,6 +22,7 @@ void update_cool(int level);
 void update_mph(int level);
 void update_rpm(int level);
 void update_gear(int level);
+void update_volts(int level);
 void set_coolant(int state);
 
 #endif

@@ -1,6 +1,6 @@
 #include "dash_functions.h"
 
-int cool_start;
+int cool_start, volt_start;
 
 // Show gauges
 void setup_screen(){
@@ -18,6 +18,7 @@ void setup_display_mode(){
   // Setup labels on screen
   clear_area(0,0,SOURCE,GATE);
   cool_start = write_word("Cool:\n",200,20,1,1,1,24);
+  volt_start = write_word("Volts:\n",200,60,1,1,1,24);
   write_word("rpm\n",15,210,1,1,1,24);
   write_word("Gear\n",120,130,1,1,1,24);
 
@@ -90,14 +91,28 @@ void update_cool(int level){
   if (coolant > 999 || coolant < 0) coolant = 999;
 
   // Warning colour
-  int r = 0, g = 0;
-  if (coolant > configuration.cool_threshold) r = 1;
-  else g = 1;
-  set_coolant(r);
+  int r = 1, g = 1, b = 1;
+  if (coolant > configuration.cool_threshold){
+    g = 0;
+    b = 0;
+  }
+  set_coolant(g == 0);
 
   char str[5]; 
   sprintf(str, "%d'C\n", coolant);
-  write_word(str,cool_start,20,r,g,0,24);
+  write_word(str,cool_start,20,r,g,b,24);
+}
+
+void update_volts(int level){
+  clear_area(volt_start,60,SOURCE-volt_start,24);
+
+  if (level < 0 | level > 999) level = 0;
+
+  int volts = level/10;
+  int point = level%10;
+  char str[6];
+  sprintf(str, "%d.%dV\n", volts, point);
+  write_word(str,volt_start,60,1,1,1,24);
 }
 
 void update_speed(int level){
@@ -156,7 +171,7 @@ void update_gear(int level){
 }
 
 void set_coolant(int state){
-  if (1) display_ppm_image(200,60,48,48,coolant_image);
-  else clear_area(200,60,48,48);
+  if (1) display_ppm_image(230,100,48,48,coolant_image);
+  else clear_area(230,100,48,48);
 }
 
