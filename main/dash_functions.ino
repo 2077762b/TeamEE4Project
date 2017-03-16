@@ -85,7 +85,7 @@ void update_cool(int level){
   int coolant = level;
 
   // Make sure only 3 digits
-  if (coolant > 999) coolant = 999;
+  if (coolant > 999 || coolant < 0) coolant = 999;
 
   // Warning colour
   int r = 0, g = 0;
@@ -99,11 +99,10 @@ void update_cool(int level){
 }
 
 void update_speed(int level){
-  int speed = level;
 
   if (configuration.speed_units == MPH) {
     float conversion_factor = 0.62137;
-    int speed = (int) level*conversion_factor;
+    int level = (int) level*conversion_factor;
   }
   
   clear_area(15,20,95,48);
@@ -111,48 +110,47 @@ void update_speed(int level){
   char str[4];
 
   // Make sure only 3 digits
-  if (speed > 999) {
-    speed = 999;
-    sprintf(str, "%03d\n", speed);
+  if (level > 999 || level < 0) {
+    level = 999;
+    sprintf(str, "%03d\n", level);
   }
-  else if (speed > 99) {
-    sprintf(str, "%03d\n", speed);
+  else if (level > 99) {
+    sprintf(str, "%03d\n", level);
   }
-  else if (speed > 9) {
-    sprintf(str, "%02d\n", speed);
+  else if (level > 9) {
+    sprintf(str, "%02d\n", level);
   }
   else {
-    sprintf(str, "%01d\n", speed);
+    sprintf(str, "%01d\n", level);
   }
 
   write_word(str,15,20,1,1,1,48);
 }
 
 void update_rpm(int level){
-  clear_area(15,160,160,48);
-
-  int rpm = level;
+  clear_area(15,160,165,48);
   
   // Make sure only 5 digits
-  if (rpm > 99999) {
-    rpm = 99999;
+  if (level > 99999 || level < 0) {
+    level = 99999;
   }
+
+  // Set RPM LEDs
   
   char str[6];
-  sprintf(str, "%05d\n", rpm);
+  sprintf(str, "%05d\n", level);
   write_word(str,15,160,1,1,1,48);
 }
 
 void update_gear(int level){
-  clear_area(115,20,67,96);
-  int gear = level;
+  clear_area(122,20,67,96);
 
   // Make sure only 1 digit
-  if (gear > 9) gear = 9;
+  if (level > 9 || level < 0) level = 0;
 
   char str[2];
-  sprintf(str, "%1d\n", gear);
-  write_word(str,115,20,1,1,1,96);
+  sprintf(str, "%1d\n", level);
+  write_word(str,122,20,1,1,1,96);
 }
 
 void set_coolant(int state){

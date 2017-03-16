@@ -11,7 +11,7 @@ void setup()
   setup_config();
   setup_can();
 
-  diagnostics_mode = 0;
+  diagnostics_mode = 1;
 
   if (diagnostics_mode) {
     setup_diagnostics_mode();
@@ -94,6 +94,7 @@ void loop() {
   // update_config();
 
   Can1.begin(CAN_BPS_250K);
+  
   CAN_FRAME output1;
   output1.length = 8;
   output1.extended = 1;
@@ -108,21 +109,15 @@ void loop() {
   output1.data.bytes[7] = count;
 
   output1.id = ID_1;
-  Can1.sendFrame(output1);
-  delay(100);
 
-  output1.id = ID_2;
-  Can1.sendFrame(output1);
-  delay(100);
-
-  output1.id = ID_4;
   Can1.sendFrame(output1);
   delay(100);
 
   count++;
-  count++;
 
-  delay(100);
+  Serial.print(count);
+  Serial.print('\n');
+
 }
 
 

@@ -29,8 +29,8 @@ void setup_can_display(){
 }
 
 void setup_can_diagnostics(){
-  Can0.setRXFilter(4, 0, 0, true); //catch all IDs
-  Can0.attachCANInterrupt(4, gotFrame);
+  Can0.setRXFilter(1, 0, 0, true); //catch all IDs
+  Can0.setGeneralCallback(gotFrame);
 }
 
 void disable_can(){
