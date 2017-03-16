@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define outfile "uog.h"
+#define outfile "ugr.h"
 
 int main(int argc, char *argv[]){
 

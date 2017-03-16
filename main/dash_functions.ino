@@ -20,6 +20,8 @@ void setup_display_mode(){
   cool_start = write_word("Cool:\n",200,20,1,1,1,24);
   write_word("rpm\n",15,210,1,1,1,24);
   write_word("Gear\n",120,130,1,1,1,24);
+
+  display_ppm_image(190,180,110,37,ugr_image);
   
   if (configuration.speed_units == MPH) {
     write_word("mph\n",15,80,1,1,1,24);
