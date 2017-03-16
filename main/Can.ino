@@ -22,10 +22,12 @@ void setup_can(){
 void setup_can_display(){
   Can0.setRXFilter(0, ID_1, 0x1FFFFFFF, true);
   Can0.setRXFilter(1, ID_2, 0x1FFFFFFF, true);
-  Can0.setRXFilter(2, ID_4, 0x1FFFFFFF, true);
+  Can0.setRXFilter(2, ID_3, 0x1FFFFFFF, true);
+  Can0.setRXFilter(3, ID_4, 0x1FFFFFFF, true);
   Can0.attachCANInterrupt(0, gotFrame2000);
   Can0.attachCANInterrupt(1, gotFrame2001);
-  Can0.attachCANInterrupt(2, gotFrame2003);
+  Can0.attachCANInterrupt(2, gotFrame2002);
+  Can0.attachCANInterrupt(3, gotFrame2003);
 }
 
 void setup_can_diagnostics(){
@@ -66,6 +68,15 @@ void gotFrame2001(CAN_FRAME *frame) {
   update_speed(corrected_speed);
 }
 
+void gotFrame2002(CAN_FRAME *frame) {
+  printFrame(frame, 2002);
+
+  // Voltage
+  int16_t volts = (frame->data.byte[5]<<8) | frame->data.byte[4];
+  update_volts(volts);
+}
+
+
 // Only updates values if system is in Display mode
 void gotFrame2003(CAN_FRAME *frame) {
   printFrame(frame, 2003);
@@ -74,3 +85,4 @@ void gotFrame2003(CAN_FRAME *frame) {
   int16_t gear = (frame->data.byte[1]<<8) | frame->data.byte[0];
   update_gear(gear);
 }
+

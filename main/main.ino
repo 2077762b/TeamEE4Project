@@ -98,7 +98,7 @@ void loop() {
 
   Can1.begin(CAN_BPS_250K);
   
-  CAN_FRAME output1, output2, output3;
+  CAN_FRAME output1, output2, output3, output4;
 
   output1.id = ID_1;
   output1.length = 8;
@@ -111,16 +111,23 @@ void loop() {
   output2.extended = 1;
   output2.data.s2 = (count*10)%150; // Speed
 
-  output3.id = ID_4;
+  output3.id = ID_3;
   output3.length = 8;
   output3.extended = 1;
-  output3.data.s0 = count%6; // Gear
+  output3.data.s2 = count%1010; // volts
+  
+  output4.id = ID_4;
+  output4.length = 8;
+  output4.extended = 1;
+  output4.data.s0 = count%6; // Gear
   
   Can1.sendFrame(output1);
   delay(30);
   Can1.sendFrame(output2);
   delay(30);
   Can1.sendFrame(output3);
+  delay(30);
+  Can1.sendFrame(output4);
   delay(30);
   
   count++;

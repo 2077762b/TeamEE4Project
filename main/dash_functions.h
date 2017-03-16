@@ -6,6 +6,7 @@
 #include "Display_driver.h"
 //#include "formula1.h"
 #include "coolant.h"
+#include "ugr.h"
 #include "config.h"
 #include "LEDs.h"
 
@@ -22,6 +23,7 @@ void update_cool(int level);
 void update_mph(int level);
 void update_rpm(int level);
 void update_gear(int level);
+void update_volts(int level);
 void set_coolant(int state);
 
 #endif
