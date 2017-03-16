@@ -13,15 +13,15 @@ void setup()
 
   diagnostics_mode = 0;
 
-  if (!diagnostics_mode) {
-    setup_display_mode();
-    setup_can_display();
-  }
-  else {
+  if (diagnostics_mode) {
     setup_diagnostics_mode();
     setup_can_diagnostics();
   }
-  
+  else {
+    setup_display_mode();
+    setup_can_display();
+  }
+
   /*
    * CODE FOR ENABLING DIAGNOSTICS MODE ON STARTUP
    * 
@@ -120,9 +120,9 @@ void loop() {
   delay(100);
 
   count++;
+  count++;
 
-  delay(500);
-
+  delay(100);
 }
 
 
