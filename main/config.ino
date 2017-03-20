@@ -1,7 +1,9 @@
 #include "config.h"
 
 void setup_config() {
-  Serial.begin(9600);
+  SerialUSB.begin(9600);
+  while(!SerialUSB){
+  }
   delay(500);
 
   // Check to see if this is the first time the program has run
@@ -30,24 +32,34 @@ void setup_config() {
 }
 
 void update_config(){
-/*
-  Serial.println("Current Configuration");
-  Serial.println("*********************");
-  Serial.print("Coolant Threshold: ");
-  Serial.println(configuration.cool_threshold);
-  Serial.print("Speed Units: ");
+
+  // Display current configuration values
+  SerialUSB.println("Current Configuration");
+  SerialUSB.println("*********************");
+  SerialUSB.print("Coolant Threshold:   ");
+  SerialUSB.println(configuration.cool_threshold);
+  SerialUSB.print("Speed Units:         ");
   if (configuration.speed_units == MPH) Serial.println("MPH");
-  else Serial.println("KPH");
-  Serial.print("CAN IDs: ");
-  for (int i = 0; i<configuration.num_can_ids; i++){
-    Serial.print(configuration.can_ids[i],HEX);
-    Serial.print(" ");
+  else SerialUSB.println("KPH");
+  SerialUSB.print("Max RPM (for LEDs):  ");
+  SerialUSB.println(configuration.cool_threshold);
+  SerialUSB.println("CAN IDs:");
+  int page_index = 0;
+  int page_location_index = 0;
+  int number_checked = 0;
+  while (number_checked < configuration.num_can_ids){
+    SerialUSB.print("0x");
+    SerialUSB.print(configuration.can_pages[page_index][page_location_index],HEX);
+    SerialUSB.print("\n");
+    number_checked++;
+    page_location_index++;
+    if (page_location_index==6 && number_checked < configuration.num_can_ids) {
+      page_index++;
+      page_location_index = 0;
+    }
   }
-  Serial.println("");
-  Serial.print("Number of CAN IDS: ");
-  Serial.println(configuration.num_can_ids);
-  Serial.println(" ");
-  
+
+  /*
   Serial.println("Please enter coolant threshold value");
   while (Serial.available() == 0);
   configuration.cool_threshold = Serial.parseInt();

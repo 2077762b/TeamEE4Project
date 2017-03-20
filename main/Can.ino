@@ -1,19 +1,21 @@
 #include "Can.h"
 
+/*
 void printFrame(CAN_FRAME *frame, int filter) {
-   Serial.print("Fltr: ");
+   SerialUSB.print("Fltr: ");
    if (filter > -1) Serial.print(filter);
-   else Serial.print("???");
-   Serial.print(" ID: 0x");
-   Serial.print(frame->id, HEX);
-   Serial.print(" Len: ");
-   Serial.print(frame->length);
-   Serial.print(" Data: 0x");
+   else SerialUSB.print("???");
+   SerialUSB.print(" ID: 0x");
+   SerialUSB.print(frame->id, HEX);
+   SerialUSB.print(" Len: ");
+   SerialUSB.print(frame->length);
+   SerialUSB.print(" Data: 0x");
    for (int count = 0; count < frame->length; count++) {
-       Serial.print(frame->data.bytes[count], HEX);
+       SerialUSB.print(frame->data.bytes[count], HEX);
    }
-   Serial.print("\r\n");
+   SerialUSB.print("\r\n");
 }
+*/
 
 void setup_can(){
   Can0.begin(CAN_BPS_250K);
@@ -40,14 +42,14 @@ void disable_can(){
 }
 
 void gotFrame(CAN_FRAME *frame){
-  printFrame(frame, -1);
+  //printFrame(frame, -1);
 
   update_diagnostics(frame);
 }
 
 // Only updates values if system is in Display mode
 void gotFrame2000(CAN_FRAME *frame) {
-  printFrame(frame, 2000);
+  //printFrame(frame, 2000);
   
   // RPM
   int16_t RPM = (frame->data.byte[1]<<8) | frame->data.byte[0];
@@ -60,7 +62,7 @@ void gotFrame2000(CAN_FRAME *frame) {
 
 // Only updates values if system is in Display mode
 void gotFrame2001(CAN_FRAME *frame) {
-  printFrame(frame, 2001);
+  //printFrame(frame, 2001);
   
   // Speed
   int16_t speed = (frame->data.byte[5]<<8) | frame->data.byte[4];
@@ -69,17 +71,16 @@ void gotFrame2001(CAN_FRAME *frame) {
 }
 
 void gotFrame2002(CAN_FRAME *frame) {
-  printFrame(frame, 2002);
+  //printFrame(frame, 2002);
 
   // Voltage
   int16_t volts = (frame->data.byte[5]<<8) | frame->data.byte[4];
   update_volts(volts);
 }
 
-
 // Only updates values if system is in Display mode
 void gotFrame2003(CAN_FRAME *frame) {
-  printFrame(frame, 2003);
+  //printFrame(frame, 2003);
 
   // Gear
   int16_t gear = (frame->data.byte[1]<<8) | frame->data.byte[0];

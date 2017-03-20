@@ -15,7 +15,6 @@ void setup()
   setup_leds();
 
   diagnostics_mode = 0;
-
   if (diagnostics_mode) {
     setup_diagnostics_mode();
     setup_can_diagnostics();
@@ -24,6 +23,8 @@ void setup()
     setup_display_mode();
     setup_can_display();
   }
+
+  update_config();
 
   /*
    * CODE FOR ENABLING DIAGNOSTICS MODE ON STARTUP
@@ -52,8 +53,6 @@ void setup()
 }
 
 void loop() {
-
-  // update_config();
 
   Can1.begin(CAN_BPS_250K);
   
