@@ -5,7 +5,7 @@
 DueFlashStorage dueFlashStorage;
 
 #define COOL_THRESHOLD 80
-#define MAX_RPM 6000
+#define MAX_RPM 13500
 #define MPH 1
 #define KPH 0
 #define CONFIG_ADDR 4

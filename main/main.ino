@@ -62,7 +62,7 @@ void loop() {
   output1.id = ID_1;
   output1.length = 8;
   output1.extended = 1;
-  output1.data.s0 = (count*300)%6300; // RPM
+  output1.data.s0 = (count*600)%14000; // RPM
   output1.data.s2 = count%120; // COOLANT
   
   output2.id = ID_2;

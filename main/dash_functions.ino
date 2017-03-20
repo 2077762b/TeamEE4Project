@@ -149,7 +149,7 @@ void update_rpm(int level){
   
   // Make sure only 5 digits
   if (level > configuration.max_rpm || level < 0) {
-    level = 99999;
+    level = configuration.max_rpm;
   }
 
   // Set RPM LEDs
