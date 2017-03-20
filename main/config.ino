@@ -48,7 +48,7 @@ void update_config(){
   int page_location_index = 0;
   int number_checked = 0;
   while (number_checked < configuration.num_can_ids){
-    SerialUSB.print("0x");
+    SerialUSB.print("    0x");
     SerialUSB.print(configuration.can_pages[page_index][page_location_index],HEX);
     SerialUSB.print("\n");
     number_checked++;
