@@ -1,9 +1,6 @@
 #include "config.h"
 
 void setup_config() {
-  SerialUSB.begin(9600);
-  while(!SerialUSB){
-  }
   delay(500);
 
   // Check to see if this is the first time the program has run
@@ -32,6 +29,11 @@ void setup_config() {
 }
 
 void update_config(){
+  SerialUSB.begin(9600);
+
+  if (!SerialUSB) {
+    return;
+  }
 
   // Display current configuration values
   SerialUSB.println("Current Configuration");
