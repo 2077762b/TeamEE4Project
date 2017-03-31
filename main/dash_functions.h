@@ -18,6 +18,7 @@ void setup_screen();
 
 void setup_page(int page_number);
 void update_diagnostics(CAN_FRAME frame);
+void setup_display_mode();
 
 void update_cool(int level);
 void update_mph(int level);

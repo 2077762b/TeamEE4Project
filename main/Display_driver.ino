@@ -1,32 +1,61 @@
 #include "Display_driver.h"
 
+static int countup = 0;
+
 void Write_Command(char cmd){
-    PIOC->PIO_CODR = 0x000001fe | DC; // DC = 0 (command)
-    PIOC->PIO_SODR = cmd << 1;
-    PIOC->PIO_CODR = WR;     // WR = 0 (write)
-    PIOC->PIO_SODR = WR;     // WR = 1 
+    DC_PORT->PIO_CODR = DC;      // DC = 0 (command)
+    BUS_PORT->PIO_CODR = 0xff << BUS_SHIFT;
+    BUS_PORT->PIO_SODR = cmd << BUS_SHIFT;
+    WR_PORT->PIO_CODR = WR;      // WR = 0 (write)
+    WR_PORT->PIO_SODR = WR;      // WR = 1 
 }
 
 void Write_Parameter(char data){
-    PIOC->PIO_SODR = DC;     // DC = 1 (data)
-    PIOC->PIO_CODR = 0x000001fe;
-    PIOC->PIO_SODR = data << 1;
-    PIOC->PIO_CODR = WR;     // WR = 0 (write)
-    PIOC->PIO_SODR = WR;     // WR = 1 
+    DC_PORT->PIO_SODR = DC;     // DC = 1 (data)
+    BUS_PORT->PIO_CODR = 0xff << BUS_SHIFT;
+    BUS_PORT->PIO_SODR = data << BUS_SHIFT;
+    WR_PORT->PIO_CODR = WR;     // WR = 0 (write)
+    WR_PORT->PIO_SODR = WR;     // WR = 1 
+}
+
+void toggle(){
+    if (countup%2) {
+      WR_PORT->PIO_SODR = WR;
+      RD_PORT->PIO_SODR = RD; 
+      DC_PORT->PIO_SODR = DC;
+      RESET_PORT->PIO_SODR = RESET;
+      BUS_PORT->PIO_SODR = 0xff << BUS_SHIFT;
+    }
+    else {
+      WR_PORT->PIO_CODR = WR;
+      RD_PORT->PIO_CODR = RD; 
+      DC_PORT->PIO_CODR = DC; 
+      RESET_PORT->PIO_CODR = RESET;
+      BUS_PORT->PIO_CODR = 0xff << BUS_SHIFT;
+    }
+    countup++;
 }
 
 void init_LCD() 
 {
-    PMC->PMC_PCER0=(1<<13); //Enable Peripheral Clock
-    PIOC->PIO_PER=0xFFFFFFFF; //Enable PIO
-    PIOC->PIO_OER=0xFFFFFFFF; //Declare 
-    PIOC->PIO_SODR = WR | RD | RESET;
+    PMC->PMC_PCER0=3<12; //Enable Peripheral Clock
+
+    //Enable PIO
+    PIOB->PIO_PER=0xFFFFFFFF;
+    PIOC->PIO_PER=0x00FFFFFF;
+
+    //Declare
+    PIOB->PIO_OER=0xFFFFFFFF; 
+    PIOC->PIO_OER=0xFFFFFFFF; 
+
+    WR_PORT->PIO_SODR = WR;           // WR = 1 
+    RD_PORT->PIO_SODR = RD;           // RD = 1 
     
-    PIOC->PIO_SODR = RESET;
+    RESET_PORT->PIO_SODR = RESET;     // RESET = 1 
     delay(10);
-    PIOC->PIO_CODR = RESET;
+    RESET_PORT->PIO_CODR = RESET;     // RESET = 0 
     delay(50);
-    PIOC->PIO_SODR = RESET;
+    RESET_PORT->PIO_SODR = RESET;     // RESET = 1 
     delay(100);
     Write_Command(0x01);
     delay(10);

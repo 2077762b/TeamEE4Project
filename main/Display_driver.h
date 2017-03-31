@@ -4,14 +4,30 @@
 #include "Fonts.h"
 #include <Arduino.h>
 
-#define DC            0x02000000 // Port C, pin 25, Arduino Due pin 5
-#define WR            0x01000000 // Port C, pin 24, Arduino Due pin 6
-#define RD            0x00800000 // Port C, pin 23, Arduino Due pin 7
-#define RESET         0x00400000 // Port C, pin 22, Arduino Due pin 8
-#define LEFT_BUTTON   0x00000800 // Port C, pin 11
-#define RIGHT_BUTTON  0x00001000 // Port C, pin 12
+// PC4 (116)
+#define DC            0x00000010 
+#define DC_PORT       PIOC 
 
-// Port C, pins 1 to 8, Arduino Due pins 33 to 40 // Data bus
+// PA29 PC26 (112)
+#define WR            0x04000000 
+#define WR_PORT       PIOC
+
+// PB21 (92)
+#define RD            0x00200000 
+#define RD_PORT       PIOB
+
+// PC12-PC19 (94-101)
+#define BUS_SHIFT     12
+#define BUS_PORT      PIOC
+
+// PB14 (140)
+#define RESET         0x00004000 
+#define RESET_PORT    PIOB
+   
+#define LEFT_BUTTON   0x00000800 //                 
+#define RIGHT_BUTTON  0x00001000 // 
+
+// 94 to 101 (PC12 - PC19)   
 // Port C, pins 11 (left) and 12 (right) for buttons
 // Port C, pins 13 (CI), 14 (DI) for LEDs
 
@@ -25,5 +41,7 @@ void write_char(int start_x, int start_y, int width, int height, const unsigned 
 void display_ppm_image(int start_x, int start_y, int width, int height, const unsigned char * bit_array);
 void clear_area(int start_x, int start_y, int width, int height);
 int write_word(const char * w, int x, int y, int r, int g, int b, int font);
+
+void toggle();
 
 #endif

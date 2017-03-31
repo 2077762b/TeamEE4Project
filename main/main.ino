@@ -10,10 +10,14 @@ int gearCount = 0;
 void setup()
 {
   setup_screen();
-  setup_config();
-  setup_can();
-  setup_leds();
+  //setup_config();
+  //setup_can();
+  //setup_leds();
 
+  setup_display_mode();
+  //BUS_PORT->PIO_CODR = 0xff << BUS_SHIFT;
+
+/*
   diagnostics_mode = 0;
   if (diagnostics_mode) {
     setup_diagnostics_mode();
@@ -24,7 +28,7 @@ void setup()
     setup_can_display();
   }
 
-  update_config();
+  update_config();*/
 
   /*
    * CODE FOR ENABLING DIAGNOSTICS MODE ON STARTUP
@@ -53,8 +57,14 @@ void setup()
 }
 
 void loop() {
+  //toggle();
+  delay(1000);
+  
 
-  Can1.begin(CAN_BPS_250K);
+//Write_Parameter(0xB3); // 10110011
+  setup_display_mode();
+  
+/*  Can1.begin(CAN_BPS_250K);
   
   CAN_FRAME output1, output2, output3, output4;
 
@@ -88,7 +98,7 @@ void loop() {
   Can1.sendFrame(output4);
   delay(10);
   
-  count++;
+  count++;*/
   
 }
 
