@@ -38,15 +38,17 @@ void toggle(){
 
 void init_LCD() 
 {
-    PMC->PMC_PCER0=3<12; //Enable Peripheral Clock
+    PMC->PMC_PCER0=7<11; //Enable Peripheral Clock
 
     //Enable PIO
-    PIOB->PIO_PER=0xFFFFFFFF;
-    PIOC->PIO_PER=0x00FFFFFF;
+    PIOA->PIO_PER=0x20020000;
+    PIOB->PIO_PER=0x00204000;
+    PIOC->PIO_PER=0x200FF010;
 
     //Declare
-    PIOB->PIO_OER=0xFFFFFFFF; 
-    PIOC->PIO_OER=0xFFFFFFFF; 
+    PIOA->PIO_OER=0x20020000;
+    PIOB->PIO_OER=0x00204000;
+    PIOC->PIO_OER=0x200FF010;
 
     WR_PORT->PIO_SODR = WR;           // WR = 1 
     RD_PORT->PIO_SODR = RD;           // RD = 1 

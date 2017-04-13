@@ -4,7 +4,7 @@
 #include <DueFlashStorage.h>
 DueFlashStorage dueFlashStorage;
 
-#define COOL_THRESHOLD 80
+#define COOL_THRESHOLD 95
 #define MAX_RPM 13500
 #define MPH 1
 #define KPH 0

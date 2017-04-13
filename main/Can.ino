@@ -1,6 +1,6 @@
 #include "Can.h"
 
-/*
+
 void printFrame(CAN_FRAME *frame, int filter) {
    SerialUSB.print("Fltr: ");
    if (filter > -1) Serial.print(filter);
@@ -15,7 +15,6 @@ void printFrame(CAN_FRAME *frame, int filter) {
    }
    SerialUSB.print("\r\n");
 }
-*/
 
 void setup_can(){
   Can0.begin(CAN_BPS_250K);
@@ -42,7 +41,7 @@ void disable_can(){
 }
 
 void gotFrame(CAN_FRAME *frame){
-  //printFrame(frame, -1);
+  printFrame(frame, -1);
 
   update_diagnostics(frame);
 }

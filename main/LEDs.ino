@@ -32,7 +32,7 @@ int set_leds (int num_leds) {
     }
   }
   
-  strip.show();                     // Refresh strip
+  strip.show(); // Refresh strip
 
   return 0;
 }

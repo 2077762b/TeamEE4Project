@@ -8,9 +8,9 @@
 #define DC            0x00000010 
 #define DC_PORT       PIOC 
 
-// PA29 PC26 (112)
-#define WR            0x04000000 
-#define WR_PORT       PIOC
+// PA29 (112)
+#define WR            0x20000000 
+#define WR_PORT       PIOA
 
 // PB21 (92)
 #define RD            0x00200000 
