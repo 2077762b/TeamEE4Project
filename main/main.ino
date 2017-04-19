@@ -9,11 +9,12 @@ int gearCount = 0;
 
 void setup()
 {
-  setup_screen();
-  setup_config();
-  setup_can();
+  //setup_screen();
+  //setup_config();
+  //setup_can();
   setup_leds();
- 
+
+  /*
   diagnostics_mode = 1;
   if (diagnostics_mode) {
     setup_diagnostics_mode();
@@ -23,6 +24,7 @@ void setup()
     setup_display_mode();
     setup_can_display();
   }
+  */
 
   //update_config();
   
@@ -53,6 +55,11 @@ void setup()
 }
 
 void loop() {
+
+  set_leds((count++)%11);
+
+  delay(1000);
+  
   /*  
   Can0.begin(CAN_BPS_250K);
   

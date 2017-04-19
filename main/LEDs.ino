@@ -12,7 +12,7 @@ void setup_leds() {
   strip.show();  // Turn all LEDs off ASAP
 }
 
-int set_leds (int num_leds) {
+int set_leds(int num_leds) {
   if (num_leds > NUM_LEDS) return 1;
 
   // Clear all pixels
