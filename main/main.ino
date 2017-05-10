@@ -8,7 +8,7 @@ int count = 0;
 int gearCount = 0;
 
 void setup()
-{
+{/*
   setup_screen();
   setup_config();
   setup_can();
@@ -53,7 +53,11 @@ void setup()
 }
 
 void loop() {
-  /*  
+  toggle();
+  delay(1000);
+}
+
+/*
   Can0.begin(CAN_BPS_250K);
   
   CAN_FRAME output1, output2, output3, output4;
@@ -88,7 +92,7 @@ void loop() {
   Can0.sendFrame(output4);
   delay(10);
   count++;
-  */
+  
 }
-
+*/
 
