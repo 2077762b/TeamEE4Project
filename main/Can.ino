@@ -1,6 +1,5 @@
 #include "Can.h"
 
-
 void printFrame(CAN_FRAME *frame, int filter) {
    SerialUSB.print("Fltr: ");
    if (filter > -1) Serial.print(filter);
