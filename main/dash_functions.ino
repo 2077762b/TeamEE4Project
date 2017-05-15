@@ -2,6 +2,8 @@
 
 int cool_start, volt_start;
 
+int screen_delay = 0;
+
 // Show gauges
 void setup_screen(){
   init_LCD();
@@ -156,9 +158,13 @@ void update_rpm(int level){
   float percent = (1.0*level) / configuration.max_rpm;
   int num_leds = percent * NUM_LEDS;
   set_leds(num_leds);
-  char str[6];
-  sprintf(str, "%05d\n", level);
-  write_word(str,15,160,1,1,1,48);
+
+  if (screen_delay++) {
+    if (screen_delay == 4) screen_delay = 0;
+    char str[6];
+    sprintf(str, "%5d\n", level);
+    write_word(str,15,160,1,1,1,48);
+  }
 }
 
 void update_gear(int level){
