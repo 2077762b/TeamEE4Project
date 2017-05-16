@@ -80,6 +80,7 @@ The steering wheel display was required to display the following status indicato
   \item Battery Voltage.
   \item Warning symbols.
 \end{enumerate}
+\vspace{1cm}
 
 \textbf{Waterproofing} \\
 
@@ -128,8 +129,9 @@ The Microcontroller was to be chosen to minimise the number of peripheral elemen
   \item Fast digital I/O to update LCD display rapidly.
   \item Sufficient on-board memory.
 \end{enumerate}
+\vspace{1cm}
 
-EEPROM was required so that state could be stored when turning the device ON and OFF. The EEPROM was to be used to store configuration details that were programmable by the user. The software for this feature is detailed in Section \ref{}. \\
+EEPROM was required so that state could be stored when turning the device ON and OFF. The EEPROM was to be used to store configuration details that were programmable by the user. The software for this feature is detailed in Section \ref{sec:CAN_software}. \\
 
 The microcontroller also had to be available in a package that could be soldered by hand. \\
 
@@ -148,6 +150,7 @@ The LCD display was to be used to display the majority of the car information to
   \item Easy to read at a glance.
   \item Available in a thin package, to reduce the depth of the overall device.
 \end{enumerate}
+\vspace{1cm}
 
 As well as the operational requirements listed above, further requirements were included by the Voltswagen team in order to ensure the functionality of the device. This included a built-in display driver to make the software less complex and easier to write. This would allow the microcontroller to communicate with the display via the driver, instead of addressing individual registers on the display. Secondly, the team required clearly documented driver code to assist with programming. Lastly, as a result of the mechanical design of the outer enclosure, the display required metal or plastic tabs to allow it to fit properly within the device. \\
 
@@ -187,6 +190,84 @@ Table 1: Power Consumption of Device.
 The components were to be housed in a closed container, therefore, the generated heat needed to be assessed to ensure that the final product will not overheat in its environment. The calculations for the heat from various components have been included in Appendix \ref{}. \\
 
 After completion, the power requirements of the device were tested in a laboratory setting. It was found that the device only sourced 0.2 A at 12 V supply voltage. This was a lower value than calculated during the design phase. This result may make the device more resilient to overheating.
+
+% ====================================================================================================================
+
+\newpage
+\section{Software Design}
+\label{sec:software_design}
+
+\subsection{CAN Software}
+\label{sec:CAN_software}
+
+CAN (Controller Area Network) was used throughout the UGR racing car in order to pass information between the different components. The steering wheel display was designed to read the relevant car status information from the CAN bus and output this data on its display at real-time speeds. \\
+
+The CAN software was implemented using the Due CAN library \cite{due_can}. This is a CAN bus library that is compatible with the Arduino Due board. A large amount of information was sent over the car’s CAN bus, however not all of this information was relevant to the device. The role of the CAN software was to filter out the irrelevant information, only sending useful information to the device peripherals. The library allowed various CAN mailboxes to be set up, each with a different CAN identifier, that would call the appropriate function to handle the data in the CAN frame. The LCD screen and RPM LEDs could then be updated with the filtered car information via the display software described in Section \ref{sec:display_software}. \\
+
+The CAN bus requires a set of CAN frame identifiers in order to sort the bus information. Although these CAN identifiers were already specified by UGR, they were subject to change in the future. As a result, these identifiers had to be designed to be configurable on the device. Configurable CAN identifiers were implemented in the diagnostics software using the configuration menu described in Section \ref{sec:configuration_software}.
+
+\subsection{Display Software}
+\label{sec:display_software}
+
+The display software was used to output the relevant car information to the device peripherals: LCD display and RPM LEDs. The main requirement of this part of the software was that it had to be clear and easy to view. As a result, the colour scheme chosen was black and white, and custom fonts were used to improve the visibility of the displayed values. \\
+
+This software involved the development of a custom driver for the LCD display. This driver was designed to allow text and symbols to be output in a specified location on the LCD display, allowing for ease of configurability of the display output. Basic functions allowing text and images to be display anywhere on the screen at specified font sizes were implemented. The main display software would then make use of the driver to output values onto the LCD display. Figure \ref{} shows the display software outputting example car information. \\
+
+\input{Figures/display}
+
+DotStar LEDs were used to display the RPM of the engine, as mentioned in Section \ref{sec:LEDs}. This was implemented in software using the Adafruit DotStar Arduino Library, which allowed the colour and brightness of the LEDs to be easily configured.
+
+\subsection{Diagnostics Software}
+\label{sec:diagnostics_software}
+
+In order to aid with the debugging of the device with respect to the CAN frames, a Diagnostics Mode was implemented. This could be activated by pressing both gear buttons on startup of the device for 3 seconds. When activated, a verbose representation of the CAN bus would be printed onto the LCD display. Figure \ref{} shows an example of the CAN diagnostics software in operation. Although this was useful for the writing of the CAN software, it was also designed to be used by a mechanic for debugging the overall car’s CAN bus by allowing the screen to act as a CAN frame probe. \\
+
+Up to 30 different CAN frames were able to be displayed in diagnostics mode. Only 6 CAN frames were to be displayed on the screen at one time, therefore, 6 pages of CAN frames were implemented. The next and previous pages could be viewed by pressing the right and left gear buttons respectively.
+
+\subsection{Configuration Software}
+\label{sec:configuration_software}
+
+Some aspects of the device were required by the client to be configurable:
+
+\begin{enumerate}
+  \item Speed units (MPH or KPH).
+  \item Threshold for coolant temperature error symbol to show.
+  \item CAN frame identifiers for use in the diagnostics software.
+\end{enumerate}
+\vspace{1cm}
+
+A configuration menu through Serial USB when the device is plugged into a computer was therefore implemented. This serial interface allowed the user to configure the various details of the device through a command prompt interface. Figure \ref{} shows an example of the configuration software being used.
+
+% ====================================================================================================================
+
+\newpage
+\section{Mechanical Design}
+\label{sec:mechanical_design}
+
+As well as the electrical components, the device required mechanical design in order to meet the requirements of the customer.
+
+\subsection{Outer Enclosure}
+\label{sec:outer_enclosure}
+
+In order to house the device components, an outer enclosure needed to be constructed. The requirements from the UGR team are as follows:
+
+\begin{enumerate}
+  \item Must mount onto the current UGR wheel.
+  \item Must be lightweight.
+  \item IP67 Watertight.
+  \item Must allow for correct use of the wheel, and therefore be constrained dimensionally.
+  \item Must incorporate shifting buttons as they are in the same area of the wheel.
+\end{enumerate}
+\vspace{1cm}
+
+The outer enclosure was developed using SolidWorks. An expanded render of the outer enclosure is shown in Figure \ref{fig:device_render_expanded}. This was 3D printed using through the University.
+
+\input{Figures/device_render_expanded}
+
+\subsection{Printed Circuit Board}
+\label{sec:printed_circuit_board}
+
+As a result of the space constraints, the PCB needed to be able to fit smoothly within the design of the outer enclosure. This required the PCB to be of a specific shape, with the consistent use of small electrical components. The shape of the PCB within the context of the outer enclosure is described in Figure \ref{}.
 
 \newpage
 \bibliographystyle{ieeetr}
