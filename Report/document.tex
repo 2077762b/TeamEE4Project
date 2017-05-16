@@ -135,7 +135,7 @@ EEPROM was required so that state could be stored when turning the device ON and
 
 The microcontroller also had to be available in a package that could be soldered by hand. \\
 
-The Atmel SAM3X8E ARM Cortex-M3 microcontroller was selected for the device. This microcontroller is used in the Arduino Due boards, and the Arduino Due was used as a basis for much of the design of the steering wheel display circuitry. \\
+The Atmel SAM3X8E ARM Cortex-M3 microcontroller was selected for the device. This microcontroller is used in the Arduino Due boards, and the Arduino Due was used as a basis for much of the design of the steering wheel display circuitry. The Quad Flat Package version was selected to allow for ease of soldering. \\
 
 The Atmel SAM3X8E also included 2 CAN modules. This was useful because it allowed the testing of the CAN software without the use of more than one microcontroller; the microcontroller could send and receive to itself. \\
 
@@ -190,6 +190,11 @@ Table 1: Power Consumption of Device.
 The components were to be housed in a closed container, therefore, the generated heat needed to be assessed to ensure that the final product will not overheat in its environment. The calculations for the heat from various components have been included in Appendix \ref{}. \\
 
 After completion, the power requirements of the device were tested in a laboratory setting. It was found that the device only sourced 0.2 A at 12 V supply voltage. This was a lower value than calculated during the design phase. This result may make the device more resilient to overheating.
+
+\subsection{Other Components}
+\label{sec:other_components}
+
+All components on the device were surface mount.
 
 % ====================================================================================================================
 
