@@ -1,0 +1,228 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+
+\usepackage[hyphens]{url}
+\usepackage[margin=1in]{geometry}
+
+\author{\vspace{1cm} \\
+        Christopher Brown () \\
+        Jack Croal (2062685) \\
+        Cameron Houston (2082989) \\
+        Alex Smith () \\
+        Jok\=u bas Surgailis () \\
+}
+
+\date{}
+
+\title{\vspace{4.0cm}Steering Wheel Display - Final Report}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+
+\begin{center}
+\Large{Team Project EE4}
+\end{center}
+
+\begin{center}
+\huge{Team Voltswagen}
+\end{center}
+
+\vspace{2.0cm}
+
+\begin{center}
+\includegraphics[width=8cm]{Figures/uni_logo.png}
+\includegraphics[width=8cm]{Figures/ugr_logo_black.png}
+\end{center}
+
+\newpage
+\clearpage
+\pagenumbering{arabic}
+
+\tableofcontents
+
+% ====================================================================================================================
+
+\newpage
+\section{Introduction}
+\label{sec:introduction}
+
+As part of the Glasgow University Team Project EE4 course, a steering wheel display has been designed and prototyped for use within a University of Glasgow Racing car. This display allows the driver of the car to view live information from the CAN bus about the current status of the car. \\
+
+Being the main client for the project, University of Glasgow Racing (UGR) have been involved throughout the design and manufacturing of the final product. UGR is the Glasgow University engineering team competing in Formula Student. Formula Student is a competition inspiring University students to design and build a single-seat race car. Each team’s race car is then put to the test against other teams from around the world. The Formula Student 2017 competition takes place on the 20th July 2017 at Silverstone Circuit, England. \\
+
+It is important for the UGR race car driver to be able to view various information concerning the status of the race car because this allows the driver to understand how the car is performing. In order for the driver to be able to view this status information, a display is required. This display shows this status information such as the speed, RPM, gear number and coolant temperature by attaching directly to the car’s steering wheel. The values of these indicators were to be retrieved from the car’s central CAN bus. \\
+
+The following report covers the specifications of the completed steering wheel display, describing in detail each component and the reasons for the design.
+
+% ====================================================================================================================
+
+\newpage
+\section{Device Requirements}
+\label{sec:device_requirements}
+
+This section covers the overall requirements for the device. These requirements were obtained from the UGR team. \\
+
+The steering wheel display was required to display the following status indicators to the driver:
+
+\begin{enumerate}
+  \item Speed (MPH).
+  \item Gear number (including 'Neutral').
+  \item Coolant temperature.
+  \item Engine RPM.
+  \item Battery Voltage.
+  \item Warning symbols.
+\end{enumerate}
+
+\textbf{Waterproofing} \\
+
+It was required of the device to be IP67 compliant. This specifies that the device must be waterproof to 1m, and fully dustproof. This was because the steering wheel display needs to be operational in poor weather conditions. \\
+
+\textbf{Mechanical Sturdiness} \\
+
+The device was to be used in a mechanical environment, and therefore needed to be robust and resistant to high voltage spikes on the outside connections. \\
+
+\textbf{Overheating} \\
+
+The heat budget for the device was also important. The device was to be used for long periods of time, in possible warm temperatures. As a result, sufficient precautions for the dispersion of heat from the device needed to be taken.
+
+% ====================================================================================================================
+
+\newpage
+\section{Device Overview}
+\label{sec:device_overview}
+
+The device consisted of four main components: the RPM LEDs, the microcontroller, the LCD screen and the CAN bus electronics. Figure \ref{fig:block_diagram} shows the overall block diagram of the device. \\
+
+\input{Figures/block_diagram}
+
+CAN bus is a serial communication technology used with motor vehicles to send information between individual systems and sensors. The CAN bus transmits the display information to the microcontroller and supplies the device with power ($\sim$ 12 V DC). The CAN transceiver was used to convert the 5 V data lines of the CAN bus to the required 3.3 V input lines to the microcontroller. \\
+
+The microcontroller was then able to process the data and output it the format required for the LCD display and RPM LEDs. \\
+
+Two regulators were required in order to convert the 12 V DC voltage from the CAN bus to 5 V and 3.3 V power lines. The 5 V power line was used to power the RPM LEDs and the 3.3 V power line was used to power the microcontroller and LCD display. \\
+
+% ====================================================================================================================
+
+\newpage
+\section{Electrical Design}
+\label{sec:electrical_design}
+
+When selecting components for the final device, each component was evaluated individually and in detail. In order to aid the construction process, each component needed to be in stock and readily available from a trusted distributor. The following section describes the requirements and final decisions for each component within the steering wheel display device. \\
+
+\subsection{Microcontroller Requirements and Selection}
+\label{sec:microcontroller}
+
+The Microcontroller was to be chosen to minimise the number of peripheral elements required, whilst exhibiting sufficient processing power and I/O bus speed to provide to the LCD display, LEDs and other peripherals. As a result, the microcontroller was required to include:
+
+\begin{enumerate}
+  \item Sufficient number of digital output pins.
+  \item CAN module.
+  \item Fast digital I/O to update LCD display rapidly.
+  \item Sufficient on-board memory.
+\end{enumerate}
+
+EEPROM was required so that state could be stored when turning the device ON and OFF. The EEPROM was to be used to store configuration details that were programmable by the user. The software for this feature is detailed in Section \ref{}. \\
+
+The microcontroller also had to be available in a package that could be soldered by hand. \\
+
+The Atmel SAM3X8E ARM Cortex-M3 microcontroller was selected for the device. This microcontroller is used in the Arduino Due boards, and the Arduino Due was used as a basis for much of the design of the steering wheel display circuitry. \\
+
+The Atmel SAM3X8E also included 2 CAN modules. This was useful because it allowed the testing of the CAN software without the use of more than one microcontroller; the microcontroller could send and receive to itself. \\
+
+\subsection{LCD Display Requirements and Selection}
+\label{sec:display}
+
+The LCD display was to be used to display the majority of the car information to the driver, so it was very important for it to be able to display the appropriate information clearly and reliably. The requirements outlined by UGR are as follows:
+
+\begin{enumerate}
+  \item Clearly visible even in direct sunlight: brightness over 250 cd/$\textrm{m}^2$.
+  \item Large enough to display all required information clearly.
+  \item Easy to read at a glance.
+  \item Available in a thin package, to reduce the depth of the overall device.
+\end{enumerate}
+
+As well as the operational requirements listed above, further requirements were included by the Voltswagen team in order to ensure the functionality of the device. This included a built-in display driver to make the software less complex and easier to write. This would allow the microcontroller to communicate with the display via the driver, instead of addressing individual registers on the display. Secondly, the team required clearly documented driver code to assist with programming. Lastly, as a result of the mechanical design of the outer enclosure, the display required metal or plastic tabs to allow it to fit properly within the device. \\
+
+As a result of the requirements, the MIDAS MCT035AB0W320240LML TFT LCD display was selected \cite{display_datasheet}. This is a 320 x 240 pixel display, with an input voltage reuirement of 3.3 V. The display fitted all of the requirements given.
+
+\subsection{LED Requirements and Selection}
+\label{sec:LEDs}
+
+In order to display the engine RPM of the car more clearly, coloured LEDs were a requirement of the client. These LEDs were to be above the screen and had to be easy to read even in direct sunlight. The client prefered to use different colours of LEDs depending on how high the engine RPM was. \\
+
+It was decided to use Adafruit Dotstar LEDs for the RPM indicator \cite{dotstar_datasheet}. These devices use 2-wire SPI configuration which allow the user to configure the brightness and colour of individual LED’s in the strip. This is accomplished by using an embedded microcontroller inside the LED. 12 LEDs were implemented in the steering wheel display device. Figure \ref{} shows the final Dotstar LEDs at full engine RPM. \\
+
+After reviewing steering wheel display implementations from previous official Formula One racing cars, it was decided to use a three colour scheme of Green, Red, and Blue, in order of increasing RPM \cite{bsim_racing, daily_mail_1}. This ensured the device complied with the current trends in high-end steering wheel display design.
+
+\subsection{Power Requirements and Selection}
+\label{sec:PSU}
+
+Once the main components were selected, the overall power consumption of the device could be evaluated. Table 1 shows the quoted power requirements of the main components within the device.
+
+\begin{center}
+\begin{tabular}{ | c | c | c | c | c | c | }
+\hline
+ Component & Voltage (V) & Current (A) & Quantity & Power Consumption (W) \\
+\hline
+ LCD Display & 3.3 & 0.525 & 1 & \\
+\hline
+ Microcontroller & 3.3 & 0.8 & 1 & \\
+\hline
+ LEDs & 5 & 0.02 & 12 & \\
+\hline
+\end{tabular}
+\par
+\bigskip
+Table 1: Power Consumption of Device.
+\end{center}
+
+The components were to be housed in a closed container, therefore, the generated heat needed to be assessed to ensure that the final product will not overheat in its environment. The calculations for the heat from various components have been included in Appendix \ref{}. \\
+
+After completion, the power requirements of the device were tested in a laboratory setting. It was found that the device only sourced 0.2 A at 12 V supply voltage. This was a lower value than calculated during the design phase. This result may make the device more resilient to overheating.
+
+\newpage
+\bibliographystyle{ieeetr}
+\bibliography{bibliography}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
