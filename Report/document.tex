@@ -152,7 +152,7 @@ The microcontroller would then process the data and output it the format require
 
 When selecting components for the final device, each component was evaluated individually and in detail. In order to aid the construction process, each component needed to be in stock and readily available from a trusted distributor. The following section describes the requirements and final decisions for each component within the steering wheel display device. \\
 
-The full circuit diagram is included in Appendix \ref{}.
+The full circuit diagram is included in Appendix \ref{app:circuit_diagram}.
 
 \subsection{Microcontroller Requirements and Selection}
 \label{sec:microcontroller}
@@ -225,11 +225,11 @@ Once the main components were selected, the overall power consumption of the dev
 Table 1: Expected Power Consumption of Device.
 \end{center}
 
-This gave an approximate total expected power of: $5.6 W$ \\
+This gave an approximate total expected power of: $5.6\, W$ \\
 
 The components were to be housed in a closed container. The generated heat needed to be assessed to ensure that the final product will not overheat in its environment. The calculations for the heat from various components have been included in Appendix \ref{}. \\
  
-Two regulators were required in order to step-down the 12 V DC voltage from the CAN bus to 5 V and 3.3 V power lines. The 5 V power line was used to power the RPM LEDs and the 3.3 V power line was used to power the microcontroller and LCD display. Linear regulators could have been used for the voltage conversion, however these are innefficient and would require a large heatsink in order to prevent the device from overheating. A heatsink would not be able to fit within the spacial requirements of the outer enclosure. Therefore, it was decided to use adjustable switching buck regulators. These regulators have a very high efficiency, so a heatsink was not necessary to dissipate the heat. The Power Supply Unit circuit diagram is shown in Figure \ref{fig:psu}.
+Two regulators were required in order to step-down the 12 V DC voltage from the CAN bus to 5 V and 3.3 V power lines. The 5 V power line was used to power the RPM LEDs and the 3.3 V power line was used to power the microcontroller and LCD display. Linear regulators could have been used for the voltage conversion, however these are innefficient and would require a large heatsink in order to prevent the device from overheating. A heatsink would not be able to fit within the spacial requirements of the outer enclosure. Therefore, it was decided to use adjustable switching buck regulators. Specifically, the TPS563209DDCT and TPS562201DDCT regulators were selected \cite{psu_1, psu_2}. These regulators have a very high efficiency, so a heatsink was not necessary to dissipate the heat. The Power Supply Unit (PSU) circuit diagram is shown in Figure \ref{fig:psu}.
 
 \input{Figures/psu}
  
@@ -238,7 +238,7 @@ After completion, the power requirements of the device were tested in a laborato
 \subsection{CAN Requirements and Selection}
 \label{sec:CAN}
 
-The CAN transceiver was used to convert the 5 V data lines of the CAN bus to the required 3.3 V input lines to the microcontroller, as well as minimising any noise. Figure \ref{fig:can} shows the circuit diagram for the CAN setup, as well as the button inputs for use with the microcontroller. 
+The CAN transceiver was used to convert the 5 V data lines of the CAN bus to the required 3.3 V input lines to the microcontroller, as well as minimising any noise. The MCP2562-E/SN was selected which came in a very small package, in order to fit within the printed circuit board (PCB) \cite{can_transciever}. Figure \ref{fig:can} shows the circuit diagram for the CAN setup, as well as the button inputs for use with the microcontroller. 
 
 \input{Figures/can}
 
@@ -372,7 +372,7 @@ This section describes any possible improvements that could be made to the final
 \subsection{Professionally Fabricated Board}
 \label{sec:future_improvement_1}
 
-The Printed Circuit Board was manufactured in Glasgow University and could have been reduced in size, had it been manufactured externally. This was considered during the project design, however it was decided to not get the PCB professionally made due to the extra cost and complication of the device fabrication. A quote of £100 from ‘PCB Train’ was obtained \cite{pcb_train}. Making use of the facilities within the University reduced the project risk because it allowed PCBs to be re-designed and fabricated within a short timeframe (1-4 days, compared to the 2-week quote for a professionally made PCB).
+The PCB was manufactured in Glasgow University and could have been reduced in size, had it been manufactured externally. This was considered during the project design, however it was decided to not get the PCB professionally made due to the extra cost and complication of the device fabrication. A quote of £100 from ‘PCB Train’ was obtained \cite{pcb_train}. Making use of the facilities within the University reduced the project risk because it allowed PCBs to be re-designed and fabricated within a short timeframe (1-4 days, compared to the 2-week quote for a professionally made PCB).
 
 \subsection{More Robust Power Supply Unit}
 \label{sec:future_improvement_2}
@@ -407,6 +407,25 @@ This was a multi-desciplinary project, with many variables required to get the p
 % ====================================================================================================================
 
 \appendix
+
+\section{Circuit Diagram}
+\label{app:circuit_diagram}
+
+\subsection{CAN and button inputs}
+\label{app:can}
+\input{Appendices/can}
+
+\subsection{Microcontroller and Display}
+\label{app:microcontroller}
+\input{Appendices/microcontroller}
+
+\subsection{RPM Gauge}
+\label{app:leds}
+\input{Appendices/LEDs_full}
+
+\subsection{Power Supply Unit}
+\label{app:psu}
+\input{Appendices/psu}
 
 \section{Gantt Chart}
 \label{app:gantt_chart}
