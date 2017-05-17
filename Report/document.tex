@@ -104,10 +104,12 @@ The steering wheel display was required to display the following status indicato
   \item Coolant temperature.
   \item Engine RPM.
   \item Battery Voltage.
-  \item Warning symbols.
+  \item Coolant threshold warning symbol.
 \end{enumerate}
 
-In order to function properly, many aspects of the displayed values were required to be configurable by the user. This would increase the portability and flexibility of the device. These details are described further in Section \ref{sec:configuration_software}. \\
+In order to function properly, many aspects of the displayed values were required to be configurable by the user. This would increase the portability and flexibility of the device. The specific details of the configurability is described further in Section \ref{sec:configuration_software}. \\
+
+The device had to be attachable to the steering wheel. This introduced a size constraint on the overall device. The size constraint provided by the UGR team is that the device needed to fit within 116mm x 70mm x 20mm. This would allow the device to fit within the steering wheel, and not get in the way of the driver. \\
 
 \textbf{Waterproofing} \\
 
@@ -177,14 +179,14 @@ The LCD display was to be used to display the majority of the car information to
 
 As well as the operational requirements listed above, further requirements were included by the Voltswagen team in order to ensure the functionality of the device. This included a built-in display driver to make the software less complex and easier to write. This would allow the microcontroller to communicate with the display via the driver, instead of addressing individual registers on the display. Secondly, the team required clearly documented driver code to assist with programming. Lastly, as a result of the mechanical design of the outer enclosure, the display required metal or plastic tabs to allow it to fit properly within the device. \\
 
-As a result of the requirements, the MIDAS MCT035AB0W320240LML TFT LCD display was selected \cite{display_datasheet}. This is a 320 x 240 pixel display, with an input voltage reuirement of 3.3 V. The display fitted all of the requirements given.
+As a result of the requirements, the MIDAS MCT035AB0W320240LML TFT LCD display was selected \cite{display_datasheet}. This is a 320 x 240 pixel display, with a screen size of 3.5" and an input voltage of 3.3 V. The package size was 93.5mm x 66.44mm x 7.3mm, which would allow the screen to fit within the space requirements of the outer enclosure. The display fitted all of the requirements given.
 
 \subsection{LED Requirements and Selection}
 \label{sec:LEDs}
 
 In order to display the engine RPM of the car more clearly, coloured LEDs were a requirement of the client. These LEDs were to be above the screen and had to be easy to read even in direct sunlight. The client prefered to use different colours of LEDs depending on how high the engine RPM was. \\
 
-It was decided to use Adafruit Dotstar LEDs for the RPM indicator \cite{dotstar_datasheet}. These devices use 2-wire SPI configuration which allow the user to configure the brightness and colour of individual LED’s in the strip. This is accomplished by using an embedded microcontroller inside the LED. 12 LEDs were implemented in the steering wheel display device. Figure \ref{} shows the final Dotstar LEDs at full engine RPM. \\
+It was decided to use Adafruit Dotstar LEDs for the RPM indicator \cite{dotstar_datasheet}. These devices use 2-wire SPI configuration which allow the programmer to configure the brightness and colour of individual LED’s in the strip. This is accomplished using an embedded microcontroller inside the LED. 12 LEDs were implemented on the device. Figure \ref{} shows the final Dotstar LEDs at full engine RPM. \\
 
 After reviewing steering wheel display implementations from previous official Formula One racing cars, it was decided to use a three colour scheme of Green, Red, and Blue, in order of increasing RPM \cite{bsim_racing, daily_mail_1}. This ensured the device complied with the current trends in high-end steering wheel display design.
 
