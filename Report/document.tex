@@ -8,6 +8,7 @@
 \usepackage[margin=1.2in]{geometry}
 
 \usepackage{subcaption}
+\usepackage[title,titletoc,page]{appendix}
 
 \usepackage{titlesec}
 \titlespacing*{\section}
@@ -16,11 +17,11 @@
 {0pt}{5.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
 
 \author{\vspace{1cm} \\
-        Christopher Brown () \\
+        Christopher Brown (2077762) \\
         Jack Croal (2062685) \\
         Cameron Houston (2082989) \\
-        Alex Smith () \\
-        Jok\=u bas Surgailis () \\
+        Alex Smith (2083008) \\
+        Jok\=ubas Surgailis (2065915) \\
 }
 
 \date{}
@@ -55,6 +56,18 @@
 \clearpage
 \pagenumbering{arabic}
 
+% TODO: MAKE SURE THE USE OF ‘CLIENT’ AND ‘CUSTOMER’ IS CONSISTENT
+% TODO: ENSURE THE USE OF ‘PRINTED CIRCUIT BOARD’ IN HEADINGS AND ‘PCB’ IN TEXT (FIRST ONE MUST BE SPECIFIED WITH BRACKETS.
+% TODO: ENSURE THE USE OF ‘OUTER ENCLOSURE’ INSTEAD OF ‘CASE’/ ‘CASING’ 
+% TODO: Anything else to be configurable? Section configuration software
+% TODO: more details about software eg. geniusness of pages
+% TODO: conclusion
+% TODO: figure out how to include code
+% TODO: spell check
+% TODO: plaigiarism check
+% TODO: look for any ref{}
+
+
 % ====================================================================================================================
 
 \newpage
@@ -70,6 +83,12 @@
 
   \center{
     Dr David Muir
+  }
+  \center{
+    Mr Andrew Phillips
+  }
+  \center{
+    Mrs Shona Ballantyne
   }
 
 }
@@ -124,11 +143,11 @@ It was required of the device to be IP67 compliant. This specifies that the devi
 
 \textbf{Mechanical Sturdiness} \\
 
-The device was to be used in a mechanical environment, and therefore needed to be robust and resistant to high voltage spikes on the outside connections. \\
+The device was to be used in a mechanical environment, and therefore needed to be sturdy. The device also had to be resistant to high voltage spikes on the outside connections. \\
 
 \textbf{Overheating} \\
 
-The heat budget for the device was also important. The device was to be used for long periods of time, in possible warm temperatures. As a result, sufficient precautions for the dispersion of heat from the device needed to be taken.
+The heat budget for the device was also important. The device was to be used for long periods of time on the race track, possibly in warm temperatures. As a result, sufficient precautions for the dispersion of heat from the device needed to be taken.
 
 % ====================================================================================================================
 
@@ -157,7 +176,7 @@ The full circuit diagram is included in Appendix \ref{app:circuit_diagram}.
 \subsection{Microcontroller Requirements and Selection}
 \label{sec:microcontroller}
 
-The Microcontroller was to be chosen to minimise the number of peripheral elements required, whilst exhibiting sufficient processing power and I/O bus speed to provide to the LCD display, LEDs and other peripherals. As a result, the microcontroller was required to include:
+The microcontroller was to be chosen to minimise the number of peripheral elements required, whilst exhibiting sufficient processing power and I/O bus speed to provide to the LCD display, LEDs and other peripherals. As a result, the microcontroller was required to include:
 
 \begin{enumerate}
   \item Sufficient number of digital output pins.
@@ -170,7 +189,7 @@ The microcontroller also had to be available in a package that could be soldered
 
 Built-in writable EEPROM was also required on the microcontroller so that state could be stored when turning the device on and off. The EEPROM was to be used to store configuration details that were programmable by the user. The software for this feature is detailed in Section \ref{sec:CAN_software}. \\
 
-The Atmel SAM3X8E ARM Cortex-M3 microcontroller was selected for the device. This microcontroller is used in the Arduino Due boards, and the Arduino Due was used as a basis for much of the design of the steering wheel display circuitry. The Quad Flat Package version was selected to allow for ease of soldering. \\
+The Atmel SAM3X8E ARM Cortex-M3 microcontroller was selected for the device \cite{microcontroller}. This microcontroller is used in the Arduino Due boards, and the Arduino Due was used as a basis for much of the design of the steering wheel display circuitry. The Quad Flat Package version was selected to allow for ease of soldering. \\
 
 The Atmel SAM3X8E also included 2 CAN modules. This was useful because it allowed the testing of the CAN software without the use of more than one microcontroller; the microcontroller could send and receive to itself. \\
 
@@ -364,25 +383,6 @@ As expected, the total cost for the fabrication and design of the device is cons
 % ====================================================================================================================
 
 \newpage
-\section{Future Improvements}
-\label{sec:future_improvements}
-
-This section describes any possible improvements that could be made to the final device. These features were not included in the design due to various time and resource constraints. Although the final device met the functional and nonfunctional requirements presented by the UGR team, we believe these future improvements could further improve the capabilities of the overall device.
-
-\subsection{Professionally Fabricated Board}
-\label{sec:future_improvement_1}
-
-The PCB was manufactured in Glasgow University and could have been reduced in size, had it been manufactured externally. This was considered during the project design, however it was decided to not get the PCB professionally made due to the extra cost and complication of the device fabrication. A quote of £100 from ‘PCB Train’ was obtained \cite{pcb_train}. Making use of the facilities within the University reduced the project risk because it allowed PCBs to be re-designed and fabricated within a short timeframe (1-4 days, compared to the 2-week quote for a professionally made PCB).
-
-\subsection{More Robust Power Supply Unit}
-\label{sec:future_improvement_2}
-
-\subsection{Faster Parallel Output}
-\label{sec:future_improvement_3}
-
-% ====================================================================================================================
-
-\newpage
 \section{Project Management}
 \label{sec:project_management}
 
@@ -403,10 +403,36 @@ In order for the project to succeed it was crucial to develop a Gantt chart that
 
 This was a multi-desciplinary project, with many variables required to get the project device working properly and meeting all requirements. In order to mitigate the risk involved, a risk register was developed. This identified many of the project risks, and made sure that the team was keeping them in mind during development. The risk register is included in Appendix \ref{app:risk_register}.
 
+% ====================================================================================================================
+
+\newpage
+\section{Future Improvements}
+\label{sec:future_improvements}
+
+This section describes any possible improvements that could be made to the final device. These features were not included in the design due to various time and resource constraints. Although the final device met the functional and nonfunctional requirements presented by the UGR team, we believe these future improvements could further improve the capabilities of the overall device.
+
+\subsection{Professionally Fabricated Board}
+\label{sec:future_improvement_1}
+
+The PCB was manufactured in Glasgow University and could have been reduced in size, had it been manufactured externally. This was considered during the project design, however it was decided to not get the PCB professionally made due to the extra cost and complication of the device fabrication. A quote of £100 from ‘PCB Train’ was obtained \cite{pcb_train}. Making use of the facilities within the University reduced the project risk because it allowed PCBs to be re-designed and fabricated within a short timeframe (1-4 days, compared to the 2-week quote for a professionally made PCB).
 
 % ====================================================================================================================
 
-\appendix
+\section{Conclusion}
+\label{sec:conclusion}
+
+
+
+% ====================================================================================================================
+
+\newpage
+\bibliographystyle{ieeetr}
+\bibliography{bibliography}
+
+% ====================================================================================================================
+
+\addtocontents{toc}{\protect\newpage}
+\begin{appendices}
 
 \section{Circuit Diagram}
 \label{app:circuit_diagram}
@@ -436,11 +462,9 @@ This was a multi-desciplinary project, with many variables required to get the p
 \label{app:risk_register}
 \input{Appendices/risk_register}
 
-% ====================================================================================================================
+\end{appendices}
 
-\newpage
-\bibliographystyle{ieeetr}
-\bibliography{bibliography}
+% ====================================================================================================================
 
 \end{document}
 
