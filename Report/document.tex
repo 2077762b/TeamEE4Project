@@ -13,7 +13,7 @@
 \titlespacing*{\section}
 {0pt}{5.5ex plus 1ex minus .2ex}{5.3ex plus .2ex}
 \titlespacing*{\subsection}
-{0pt}{5.5ex plus 1ex minus .2ex}{5.3ex plus .2ex}
+{0pt}{5.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
 
 \author{\vspace{1cm} \\
         Christopher Brown () \\
@@ -25,7 +25,7 @@
 
 \date{}
 
-\title{\vspace{4.0cm}Steering Wheel Display - Final Report}
+\title{\vspace{1.0cm}Steering Wheel Display - Final Report\vspace{1.0cm}}
 
 \setlength\parindent{0pt}
 \newcommand{\forceindent}{\leavevmode{\parindent=6em\indent}}
@@ -58,14 +58,21 @@
 % ====================================================================================================================
 
 \newpage
-\section{Acknowledgements}
-\label{sec:acknowledgements}
+{\Huge Acknowledgements} \\
 
-Team VoltsWagen would like to thank the following people for their advice and councelling over the course of the project. \\
+{\large
 
-\vspace{1.0cm}
+  \vspace{1.0cm}
 
-\forceindent Dr David Muir
+  Team VoltsWagen would like to thank the following people for their advice and councelling over the course of the project. \\
+
+  \vspace{1.0cm}
+
+  \center{
+    Dr David Muir
+  }
+
+}
 
 % ====================================================================================================================
 
@@ -82,7 +89,7 @@ As part of the Glasgow University Team Project EE4 course, a steering wheel disp
 
 Being the main client for the project, University of Glasgow Racing (UGR) have been involved throughout the design and manufacturing of the final product. UGR is the Glasgow University engineering team competing in Formula Student. Formula Student is a competition inspiring University students to design and build a single-seat race car. Each team’s race car is then put to the test against other teams from around the world. The Formula Student 2017 competition takes place on the 20th July 2017 at Silverstone Circuit, England. \\
 
-It is important for the UGR race car driver to be able to view various information concerning the status of the race car because this allows the driver to understand how the car is performing. A regular car dashboard would not suit a racing environment because only specific information should be shown to the driver and there is limited space with the confines of the car 'cockpit'. In order for the driver to be able to view this status information, a small display is required. This display shows this status information such as the speed, RPM, gear number and coolant temperature by attaching directly to the car’s steering wheel. The values of these indicators were to be retrieved from the car's central CAN bus. \\
+It is important for the UGR race car driver to be able to view various information concerning the status of the race car because this allows the driver to understand how the car is performing. A regular car dashboard would not suit a racing environment because only specific information should be shown to the driver and there is limited space with the confines of the car `cockpit'. In order for the driver to be able to view this status information, a small display is required. This display shows this status information such as the speed, RPM, gear number and coolant temperature by attaching directly to the car’s steering wheel. The values of these indicators were to be retrieved from the car's central CAN bus. \\
 
 The following report covers the specifications of the completed steering wheel display, describing in detail each component and the reasons for the design. \\
 
@@ -100,7 +107,7 @@ The steering wheel display was required to display the following status indicato
 
 \begin{enumerate}
   \item Speed (MPH).
-  \item Gear number (including 'Neutral').
+  \item Gear number (including `Neutral').
   \item Coolant temperature.
   \item Engine RPM.
   \item Battery Voltage.
@@ -133,7 +140,7 @@ The device consisted of four main components: the RPM LEDs, the microcontroller,
 
 \input{Figures/block_diagram}
 
-CAN bus is a serial communication technology used with motor vehicles to send information between individual systems and sensors. The car's central CAN bus was used to transmit the display information to the microcontroller and supply the device with power ($\sim$ 12 V DC). The CAN transceiver was used to convert the 5 V data lines of the CAN bus to the required 3.3 V input lines to the microcontroller. \\
+CAN bus is a serial communication technology used with motor vehicles to send information between individual systems and sensors. The car's central CAN bus was used to transmit the display information to the microcontroller and supply the device with power ($\sim$ 12 V DC). \\
 
 The microcontroller would then process the data and output it the format required for the LCD display and RPM LEDs. \\
 
@@ -144,6 +151,8 @@ The microcontroller would then process the data and output it the format require
 \label{sec:electrical_design}
 
 When selecting components for the final device, each component was evaluated individually and in detail. In order to aid the construction process, each component needed to be in stock and readily available from a trusted distributor. The following section describes the requirements and final decisions for each component within the steering wheel display device. \\
+
+The full circuit diagram is included in Appendix \ref{}.
 
 \subsection{Microcontroller Requirements and Selection}
 \label{sec:microcontroller}
@@ -181,30 +190,34 @@ As well as the operational requirements listed above, further requirements were 
 
 As a result of the requirements, the MIDAS MCT035AB0W320240LML TFT LCD display was selected \cite{display_datasheet}. This is a 320 x 240 pixel display, with a screen size of 3.5" and an input voltage of 3.3 V. The package size was 93.5mm x 66.44mm x 7.3mm, which would allow the screen to fit within the space requirements of the outer enclosure. The display fitted all of the requirements given.
 
-\subsection{LED Requirements and Selection}
+\subsection{RPM Gauge Requirements and Selection}
 \label{sec:LEDs}
 
 In order to display the engine RPM of the car more clearly, coloured LEDs were a requirement of the client. These LEDs were to be above the screen and had to be easy to read even in direct sunlight. The client prefered to use different colours of LEDs depending on how high the engine RPM was. \\
 
-It was decided to use Adafruit Dotstar LEDs for the RPM indicator \cite{dotstar_datasheet}. These devices use 2-wire SPI configuration which allow the programmer to configure the brightness and colour of individual LED’s in the strip. This is accomplished using an embedded microcontroller inside the LED. 12 LEDs were implemented on the device. Figure \ref{} shows the final Dotstar LEDs at full engine RPM. \\
+It was decided to use Adafruit DotStar LEDs for the RPM indicator \cite{dotstar_datasheet}. These devices use 2-wire SPI configuration which allow the programmer to configure the brightness and colour of individual LED’s in the strip. This is accomplished using an embedded microcontroller inside the LED. 12 LEDs were implemented on the device. A simplified circuit diagram of the DotStar LEDs is shown in Figure \ref{fig:leds_4}. The Data In (DI) and Clock (Cl) pins are shown being input to the first LED, which is then connected to the rest of the chain.
 
-After reviewing steering wheel display implementations from previous official Formula One racing cars, it was decided to use a three colour scheme of Green, Red, and Blue, in order of increasing RPM \cite{bsim_racing, daily_mail_1}. This ensured the device complied with the current trends in high-end steering wheel display design.
+\input{Figures/leds_4}
 
-\subsection{Power Requirements and Selection}
+After reviewing steering wheel display implementations from previous official Formula One racing cars, it was decided to use a three colour scheme of Green, Red, and Blue, in order of increasing RPM \cite{bsim_racing, daily_mail_1}. This ensured the device complied with the current trends in high-end steering wheel display design. Figure \ref{fig:full_leds} shows the final Dotstar LEDs at full engine RPM.
+
+\input{Figures/full_leds}
+
+\subsection{Power Supply Unit Requirements and Selection}
 \label{sec:PSU}
 
-Once the main components were selected, the overall power consumption of the device was then evaluated. Table 1 shows the quoted power requirements of the main components within the device.
+Once the main components were selected, the overall power consumption of the device was then evaluated. Table 1 shows the calculated expected power requirements of the main components within the device. These values were obtained from the values quoted on the datasheets of each component.
 
 \begin{center}
 \begin{tabular}{ | c | c | c | c | c | c | }
 \hline
  Component & Voltage (V) & Current (A) & Quantity & Power Consumption (W) \\
 \hline
- LCD Display & 3.3 & 0.525 & 1 & \\
+ LCD Display & 3.3 & 0.525 & 1 & 1.73 \\
 \hline
- Microcontroller & 3.3 & 0.8 & 1 & \\
+ Microcontroller & 3.3 & 0.8 & 1 & 2.64 \\
 \hline
- LEDs & 5 & 0.02 & 12 & \\
+ LEDs & 5 & 0.02 & 12 & 1.20 \\
 \hline
 \end{tabular}
 \par
@@ -212,16 +225,31 @@ Once the main components were selected, the overall power consumption of the dev
 Table 1: Expected Power Consumption of Device.
 \end{center}
 
-The components were to be housed in a closed container. The generated heat needed to be assessed to ensure that the final product will not overheat in its environment. The calculations for the heat from various components have been included in Appendix \ref{}.
+This gave an approximate total expected power of: $5.6 W$ \\
+
+The components were to be housed in a closed container. The generated heat needed to be assessed to ensure that the final product will not overheat in its environment. The calculations for the heat from various components have been included in Appendix \ref{}. \\
  
-Two regulators were required in order to step-down the 12 V DC voltage from the CAN bus to 5 V and 3.3 V power lines. The 5 V power line was used to power the RPM LEDs and the 3.3 V power line was used to power the microcontroller and LCD display. Linear regulators could have been used for the voltage conversion, however these are innefficient and would require a large heatsink in order to prevent the device from overheating. A heatsink would not be able to fit within the spacial requirements of the outer enclosure. Therefore, it was decided to use adjustable switching buck regulators. These regulators have a very high efficiency, so a heatsink was not necessary to dissipate the heat. \\
+Two regulators were required in order to step-down the 12 V DC voltage from the CAN bus to 5 V and 3.3 V power lines. The 5 V power line was used to power the RPM LEDs and the 3.3 V power line was used to power the microcontroller and LCD display. Linear regulators could have been used for the voltage conversion, however these are innefficient and would require a large heatsink in order to prevent the device from overheating. A heatsink would not be able to fit within the spacial requirements of the outer enclosure. Therefore, it was decided to use adjustable switching buck regulators. These regulators have a very high efficiency, so a heatsink was not necessary to dissipate the heat. The Power Supply Unit circuit diagram is shown in Figure \ref{fig:psu}.
+
+\input{Figures/psu}
  
 After completion, the power requirements of the device were tested in a laboratory setting. It was found that the device sourced a maximum of 0.3 A at 12 V supply voltage. This was a lower power value than calculated during the design phase. This result may make the device more resilient to overheating.
+
+\subsection{CAN Requirements and Selection}
+\label{sec:CAN}
+
+The CAN transceiver was used to convert the 5 V data lines of the CAN bus to the required 3.3 V input lines to the microcontroller, as well as minimising any noise. Figure \ref{fig:can} shows the circuit diagram for the CAN setup, as well as the button inputs for use with the microcontroller. 
+
+\input{Figures/can}
 
 \subsection{Other Components}
 \label{sec:other_components}
 
-All components on the device were surface mount.
+All components on the device were surface mount. \\
+
+In order for the device to connect to the car's CAN bus and button inputs, two Bulgin circular connectors were placed on the back, as can be seen in Figure \ref{fig:device_back}.
+
+\input{Figures/device_back}
 
 % ====================================================================================================================
 
@@ -258,7 +286,9 @@ DotStar LEDs were used to display the RPM of the engine, as mentioned in Section
 \subsection{Diagnostics Software}
 \label{sec:diagnostics_software}
 
-In order to aid with the debugging of the device with respect to the CAN frames, a Diagnostics Mode was implemented. This could be activated by pressing both gear buttons on startup of the device for 3 seconds. When activated, a verbose representation of the CAN bus would be printed onto the LCD display. Figure \ref{} shows an example of the CAN diagnostics software in operation. Although this was useful for the writing of the CAN software, it was also designed to be used by a mechanic for debugging the overall car’s CAN bus by allowing the screen to act as a CAN frame probe. \\
+In order to aid with the debugging of the device with respect to the CAN frames, a Diagnostics Mode was implemented. This could be activated by pressing both gear buttons on startup of the device for 3 seconds. When activated, a verbose representation of the CAN bus would be printed onto the LCD display. Figure \ref{fig:diagnostics} shows an example of the CAN diagnostics software in operation. Although this was useful when writing the software, it was also designed to be used by a mechanic for debugging the overall car’s CAN bus by allowing the screen to act as a CAN frame probe.
+
+\input{Figures/diagnostics}
 
 Up to 30 different CAN frames were able to be displayed in diagnostics mode. Only 6 CAN frames were to be displayed on the screen at one time, therefore, 6 pages of CAN frames were implemented. The next and previous pages could be viewed by pressing the right and left gear buttons respectively.
 
@@ -268,16 +298,16 @@ Up to 30 different CAN frames were able to be displayed in diagnostics mode. Onl
 Some aspects of the device were required by the client to be configurable, as previously discussed. Specifically:
 
 \begin{enumerate}
-  \item Speed units (MPH or KPH).
   \item Threshold for coolant temperature error symbol to show.
+  \item Speed units (MPH or KPH).
   \item CAN frame identifiers for use in the diagnostics software.
 \end{enumerate}
 
-A configuration menu through Serial USB when the device is plugged into a computer was therefore implemented. This serial interface allowed the user to configure the various details of the device through a command prompt interface. Figure \ref{} shows an example of the configuration software being used.
+A configuration menu through Serial USB when the device is plugged into a computer was therefore implemented. This serial interface allowed the user to configure the various details of the device through a command prompt interface. Figure \ref{fig:configuration_software} shows an example of the configuration software being used. The current configuration is printed to the screen, then the user enters the new configuration values when prompted. When the configuration changes are successful, the new configuration is printed to the screen.
 
-%\input{Figures/configuration_software}
+\input{Figures/configuration_software}
 
-State was stored on the device using the microcontroller's built-in EEPROM. This was implemented in software using the Due Flash Storage library \cite{due_flash_storage}. When activated, by plugging the device into a computer with the serial input/output enabled, the user would be able to select personalised configuration options. After configuration the new values would automatically be loaded into the software when the device is next turned on. If the device has not yet been configured, then default values are loaded into the software instead.
+State was stored on the device using the microcontroller's built-in EEPROM. This was implemented in software using the Due Flash Storage library \cite{due_flash_storage}. When activated, by plugging the device into a computer with the serial USB port enabled, the user would be able to select personalised configuration options. After configuration the new values would automatically be loaded into the software when the device is next turned on. If the device has not yet been configured, then default values are loaded into the software instead.
 
 % ====================================================================================================================
 
@@ -322,14 +352,14 @@ Costs were monitered throughtout the design and fabrication of the device. It wa
 \subsection{Cost for fabrication of the device}
 \label{sec:device_cost}
 
-The approximate cost for the materials of the device was £90. The fabrication of the PCB and the outer enclosure are not included in this value because University services were used.
+The approximate cost for the materials of the device was £90. The fabrication of the PCB and the outer enclosure are not included in this value because University services were used. \\
 
 As described in Section \ref{sec:outer_enclosure}, the case was developed using a 3D printed plastic. This could have been fabicated out of a different, more expensive, material such as aluminium. This would be expected to improve the heat dissipation, mechanical sturdyness and overall appearance of the device. However, it was decided that the cost trade-off was too high, and the device would still perform well within the requirements if a plastic case was used instead.
 
 \subsection{Total cost for development}
 \label{sec:total_cost}
 
-As expected, the total cost for the fabrication and design of the device is considerably higher than £90. This is because multiple prototypes were constructed and tested. A table of the total cost of components is included in Appendix \ref{}.
+As expected, the total cost for the fabrication and design of the device is considerably higher than £90. This is because multiple prototypes were constructed and tested. The total cost of components is included in Appendix \ref{}.
 
 % ====================================================================================================================
 
@@ -355,6 +385,37 @@ The Printed Circuit Board was manufactured in Glasgow University and could have 
 \newpage
 \section{Project Management}
 \label{sec:project_management}
+
+This section documents how the team was structured as well as showing how pivotal the planning stage was to the success of the project.
+
+\subsection{Team Roles}
+\label{sec:team_roles}
+
+Although there were no specific roles assigned to members of the team, each team member found themselves contributing to specific parts of the project more than others. Basic roles were used to split the project into separate tasks. For example, the software, electrical and mechanical aspects of the design. However, these roles were not rigid and there was crossovers throughout the project. This method worked and a key part of the success of this setup was due to regular team meetings. Each member was aware of the progress that had been made and what each member needed to focus on for the next meeting. This kept the team on track and ultimately helped in having a fully functional product in time for the deadline.
+
+\subsection{Gantt Chart}
+\label{sec:gantt_chart}
+
+In order for the project to succeed it was crucial to develop a Gantt chart that would both help to break tasks down into manageable chunks and also make sure that deadlines during the project would be met. The Gantt chart was updated as the project progressed. Lead and lag times was more accurately factored into the chart once specific design decisions were made. The final Gantt chart can be found in Appendix \ref{app:gantt_chart}.
+
+\subsection{Risk Register}
+\label{sec:risk_register}
+
+This was a multi-desciplinary project, with many variables required to get the project device working properly and meeting all requirements. In order to mitigate the risk involved, a risk register was developed. This identified many of the project risks, and made sure that the team was keeping them in mind during development. The risk register is included in Appendix \ref{app:risk_register}.
+
+
+% ====================================================================================================================
+
+\appendix
+
+\section{Gantt Chart}
+\label{app:gantt_chart}
+\vspace{-2.5cm}
+\input{Appendices/gantt_chart}
+
+\section{Risk Register}
+\label{app:risk_register}
+\input{Appendices/risk_register}
 
 % ====================================================================================================================
 
