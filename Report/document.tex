@@ -124,21 +124,21 @@ The device was required to display the following status indicators to the driver
   \item Coolant threshold warning symbol.
 \end{enumerate}
 
-In order to function properly, certain aspects of these displayed values were required to be configurable by the user. This would increase the portability and flexibility of the device. The specific details of the configurability is described further in Section \ref{sec:configuration_software}. \\
+In order to function properly, certain aspects of these displayed values were required to be configurable by the user. This would increase the portability and flexibility of the device. The specific details of the configurability are described further in Section \ref{sec:configuration_software}. \\
 
 The device had to be attachable to the steering wheel. This introduced a size constraint on the overall device. The size constraint provided by the UGR team is that the device needed to fit within 116mm x 70mm x 20mm. This would allow the device to fit within the steering wheel, and not get in the way of the driver. \\
 
 \textbf{Waterproofing} \\
 
-It was required of the device to be IP67 compliant. This specifies that the device had to be waterproof to 1m, and fully dustproof. This was because a steering wheel display needed to be operational in poor weather conditions. \\
+It was required of the device to be IP67 compliant. This specifies that the device had to be waterproof to 1m, and fully dustproof. This was because the steering wheel display needed to be operational in poor weather conditions. \\
 
-\textbf{Mechanical Sturdiness} \\
+\textbf{Reliability} \\
 
 The device was to be used in a mechanical environment, and therefore needed to be sturdy. It also had to be resistant to high voltage spikes on the outside connections. \\
 
 \textbf{Overheating} \\
 
-The heat budget for the device was also important. The device was to be used for long periods of time on the race track, possibly in warm temperatures. As a result, sufficient precautions for the dispersion of heat from the device needed to be taken.
+The heat budget for the device was also important. The device was to be used for long periods of time on the race track, possibly in warm temperatures. As a result, sufficient precautions for the disipation of heat and the reduction of heat generation from the device needed to be taken.
 
 % ====================================================================================================================
 
@@ -178,9 +178,9 @@ The microcontroller was to be chosen to minimise the number of peripheral elemen
 
 The microcontroller also had to be available in a package that could be soldered by hand. \\
 
-Built-in writable EEPROM was also required on the microcontroller so that state could be stored when turning the device on and off. The EEPROM was to be used to store configuration details that were programmable by the user. A software description for this feature is detailed in Section \ref{sec:CAN_software}. \\
+Built-in writable flash memory was also required on the microcontroller so that state could be stored when turning the device on and off. The flash memory was to be used to store configuration details that were programmable by the user. A software description for this feature is detailed in Section \ref{sec:CAN_software}. \\
 
-The Atmel SAM3X8E ARM Cortex-M3 microcontroller was selected for the device \cite{microcontroller}. This microcontroller is used in the Arduino Due boards, therefore, the Arduino Due was used as a basis for much of the design of the steering wheel display circuitry. The Quad Flat Package version was selected to allow for ease of soldering. \\
+The Atmel SAM3X8E ARM Cortex-M3 microcontroller was selected for the device \cite{microcontroller}. This microcontroller is used in the Arduino Due boards. The decision to make use of an Arduino-integrated microcontroller was based upon the ease of use and vast quantity of Arduino platform packages, libraries and support available. The Arduino Due was used as a basis for much of the design of the steering wheel display circuitry, and also for early prototyping. The Quad Flat Package version was selected to allow for ease of soldering. \\
 
 The Atmel SAM3X8E also included 2 CAN modules. This was useful because it allowed the testing of the CAN software without the use of more than one microcontroller; the microcontroller could send and receive to itself. \\
 
@@ -196,7 +196,7 @@ The LCD display was to be used to display the majority of the car information to
   \item Available in a thin package, to reduce the depth of the device.
 \end{enumerate}
 
-As well as the operational requirements listed above, further requirements were included by the VoltsWagen team in order to ensure the functionality of the device. This included a built-in display driver to make the software less complex and easier to write. This would allow the microcontroller to communicate with the display via the driver, instead of addressing individual registers on the display. Secondly, the team required clearly documented driver code to assist with programming. Lastly, as a result of the mechanical design of the outer enclosure, the display required metal or plastic tabs to allow it to fit properly within the device. \\
+As well as the operational requirements listed above, further requirements were included by the VoltsWagen team in order to ensure the functionality of the device. This included a built-in display controller to make the software less complex and easier to write. This would allow the microcontroller to communicate with the display via the controller, instead of addressing individual registers on the display. Secondly, the team required clearly documented controller code to assist with programming. Lastly, as a result of the mechanical design of the outer enclosure, the display required metal or plastic tabs to allow it to fit properly within the device. \\
 
 As a result of the requirements, the MIDAS MCT035AB0W320240LML TFT LCD display was selected \cite{display_datasheet}. This is a 320 x 240 pixel display, with a screen size of 3.5" and an input voltage of 3.3 V. The package size was 93.5mm x 66.44mm x 7.3mm, which would allow the screen to fit within the space requirements of the outer enclosure. The display fitted all of the requirements given.
 
@@ -205,7 +205,7 @@ As a result of the requirements, the MIDAS MCT035AB0W320240LML TFT LCD display w
 
 In order to display the engine RPM of the car more clearly, coloured LEDs were a requirement given by the client. These LEDs were to be above the screen and had to be easy to read even in direct sunlight. The client preferred to use different colours of LEDs, depending on how high the engine RPM was. \\
 
-It was decided to use Adafruit DotStar LEDs for the RPM indicator \cite{dotstar_datasheet}. These devices use 2-wire SPI configuration which allow the programmer to configure the brightness and colour of individual LED’s in the strip. This is accomplished using an embedded microcontroller inside the LED. 12 LEDs were implemented on the device. A simplified circuit diagram of the DotStar LEDs is shown in Figure \ref{fig:leds_4}. The Data In (DI) and Clock (Cl) pins are shown being input to the first LED, which is then connected to the rest of the chain.
+It was decided to use Adafruit DotStar LEDs for the RPM indicator \cite{dotstar_datasheet}. These devices use 2-wire SPI daisy-chain configuration which allow the programmer to configure the brightness and colour of individual LED’s in the strip. This is accomplished with an embedded LED driver chip within the DotStar package. Because the LEDs could be controlled with only 2 wires, the amount of wiring required was reduced. A simplified circuit diagram of the DotStar LEDs is shown in Figure \ref{fig:leds_4}. The Data In (DI) and Clock (Cl) pins are shown being input to the first LED, which is then connected to the rest of the chain.
 
 \input{Figures/leds_4}
 
@@ -233,14 +233,14 @@ Once the main components were selected, the overall power consumption of the dev
 \end{tabular}
 \par
 \bigskip
-Table 1: Expected Power Consumption of Device.
+Table 1: Expected Power Consumption of Device. \footnote{Each DotStar was quoted to use 0.06 A with the LED on full RGB, however only one colour was to be used at a time, so a maximum of 0.02 A would be sourced.}
 \end{center}
 
 This gave an approximate total expected power of: $5.6\, W$ \\
 
-The components were to be housed in a closed container. The generated heat needed to be controlled to ensure that the final product will not overheat in its environment. \\
+The components were to be housed in a closed container. The generated heat needed to be controlled to ensure that the final product would not overheat in its environment. \\
  
-Two regulators were required in order to step-down the 12 V DC voltage from the CAN bus to 5 V and 3.3 V power lines. The 5 V power line was used to power the RPM LEDs and the 3.3 V power line was used to power the microcontroller and LCD display. Linear regulators could have been used for the voltage conversion, however these are inefficient and would have required a large heat sink in order to prevent the device from overheating. A heat sink would not be able to fit within the size requirements of the outer enclosure. Therefore, it was decided to use adjustable switching buck regulators. Specifically, the TPS563209DDCT and TPS562201DDCT regulators were selected \cite{psu_1, psu_2}. These regulators have a very high efficiency, so a heat sink was not necessary in order to dissipate the heat. The Power Supply Unit (PSU) circuit diagram is shown in Figure \ref{fig:psu}.
+Two regulators were required in order to step-down the 12 V DC voltage from the CAN bus to 5 V and 3.3 V power lines. The 5 V power line was used to power the RPM LEDs and the CAN bus transceiver. The 3.3 V power line was used to power the microcontroller and LCD display. Linear regulators could have been used for the voltage conversion, however these are inefficient and would have required a large heat sink in order to prevent the device from overheating. A heat sink would not be able to fit within the size requirements of the outer enclosure. Therefore, it was decided to use adjustable switching buck regulators. Specifically, the TPS563209DDCT and TPS562201DDCT regulators were selected \cite{psu_1, psu_2}. These regulators were chosen because they exhibit a very high efficiency, so a heat sink was not necessary in order to dissipate the heat. The regulators were available in a small package, and were easily configurable to allow the voltages to be fine-tuned. The Power Supply Unit (PSU) circuit diagram is shown in Figure \ref{fig:psu}.
 
 \input{Figures/psu}
  
@@ -250,18 +250,18 @@ After completion, the power requirements of the device were tested in a laborato
 \subsection{CAN Requirements and Selection}
 \label{sec:CAN}
 
-The CAN transceiver was used to convert the 5 V data lines of the CAN bus to the required 3.3 V input lines to the microcontroller, as well as minimising any noise. The MCP2562-E/SN was selected which came in a very small package, in order to fit within the printed circuit board (PCB) \cite{can_transciever}. Figure \ref{fig:can} shows the circuit diagram for the CAN setup, as well as the button inputs for use with the microcontroller. 
+A CAN bus transceiver was used to convert the 5 V data lines of the CAN bus to the required 3.3 V input lines to the microcontroller, as well as minimising any noise. The MCP2562-E/SN was selected which came in a very small package, in order to fit within the printed circuit board (PCB) \cite{can_transciever}. Figure \ref{fig:can} shows the circuit diagram for the CAN setup, as well as the button inputs for use with the microcontroller. 
 
 \input{Figures/can}
 
 \subsection{Other Components}
 \label{sec:other_components}
 
-In order for the device to connect to the car's CAN bus and button inputs, two Bulgin circular connectors were placed on the back, as can be seen in Figure \ref{fig:device_back}.
+In order for the device to connect to the car's CAN bus and button inputs, two Bulgin circular connectors were placed on the back, as can be seen in Figure \ref{fig:device_back}. These were chosen for their compactness and they were in accordance to UGR specification. Two connectors were required because the connection to the car and the connection to the steering wheel must be independent for the steering wheel to be removable.
 
 \input{Figures/device_back}
 
-All other components on the device (resistors, capacitors etc.) were surface mount in order to reduce space on the PCB. \\
+All other components on the device (resistors, capacitors etc.) were surface mount in order to reduce space on the PCB. The use of 1\% resistors also improved the accuracy of the PSU voltages and other components. \\
 
 % ====================================================================================================================
 
@@ -289,7 +289,7 @@ The development of the display software first involved the development of a cust
 
 \input{Figures/software_hierarchy}
 
-This shows the basic low-level functions at the bottom, defined in the LCD's built-in driver, with more abstract functions implemented by team VoltsWagen above. The middle-layer was built on top of the LCD's built-in driver. Basic functions, allowing text and images to be display anywhere on the screen at specified font sizes were implemented. The top layer describes the main dashboard functions that specifically display the car's status information. This main dashboard software was able to make use of the middle-layer functions to output values onto the LCD display. Figure \ref{fig:display} shows the display software outputting example car information. \\
+This shows the basic low-level functions at the bottom, defined in the LCD's built-in controller, with more abstract functions implemented by team VoltsWagen above. The middle-layer was built on top of the LCD's built-in controller. Basic functions, allowing text and images to be display anywhere on the screen at specified font sizes were implemented. The top layer describes the main dashboard functions that specifically display the car's status information. This main dashboard software was able to make use of the middle-layer functions to output values onto the LCD display. Figure \ref{fig:display} shows the display software outputting example car information. \\
 
 \input{Figures/display}
 
@@ -321,7 +321,7 @@ Further configurability of other elements of the software, such as the layout of
 
 \input{Figures/configuration_software}
 
-State was stored on the device using the microcontroller's built-in EEPROM. This was implemented in software using the Due Flash Storage library \cite{due_flash_storage}. When activated, by plugging the device into a computer with the serial USB port enabled, the user would be able to select personalised configuration options. After configuration the new values would automatically be loaded into the software when the device is next turned on. If the device was not yet configured, then default values are loaded into the software instead.
+State was stored on the device using the microcontroller's built-in flash memory. This was implemented in software using the Due Flash Storage library \cite{due_flash_storage}. When activated, by plugging the device into a computer with the serial USB port enabled, the user would be able to select personalised configuration options. After configuration the new values would automatically be loaded into the software when the device is next turned on. If the device was not yet configured, then default values are loaded into the software instead.
 
 % ====================================================================================================================
 
@@ -344,7 +344,7 @@ In order to house the device components, an outer enclosure needed to be constru
   \item Must incorporate shifting buttons as they are in the same area of the wheel.
 \end{enumerate}
 
-The outer enclosure was developed using SolidWorks, with reference to the steering wheel CAD provided by UGR. An expanded render of the outer enclosure is shown in Figure \ref{fig:device_render_expanded}. This was 3D printed using through the University.
+The outer enclosure was developed using SolidWorks, with reference to the steering wheel CAD provided by UGR. An exploded render of the outer enclosure is shown in Figure \ref{fig:device_render_expanded}. This was 3D printed using through the University.
 
 \input{Figures/device_render_expanded}
 
@@ -413,7 +413,7 @@ This section describes any possible improvements that could be made to the final
 \subsection{Professionally Fabricated Board}
 \label{sec:future_improvement_1}
 
-The PCB was manufactured in Glasgow University and could have been reduced in size, had it been manufactured externally. This was considered during the project design, however it was decided to not get the PCB professionally made due to the extra cost and complication of the device fabrication. A quote of £100 from ‘PCB Train’ was obtained \cite{pcb_train}. Making use of the facilities within the University reduced the project risk because it allowed PCBs to be re-designed and fabricated within a short timeframe (1-4 days, compared to the 2-week quote for a professionally made PCB).
+The PCB was manufactured in Glasgow University and could have been reduced in size, had it been manufactured externally. This was considered during the project design, however it was decided to not get the PCB professionally made due to the extra cost and the 3 weeks of lead time required for the PCB to be fabricated and sent. A quote of £100 from ‘PCB Train’ was obtained \cite{pcb_train}. Making use of the facilities within the University reduced the project risk because it allowed PCBs to be re-designed and fabricated within a short timeframe (1-4 days, compared to the 2-week quote for a professionally made PCB).
 
 % ====================================================================================================================
 
