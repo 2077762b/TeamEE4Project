@@ -1,7 +1,6 @@
 #include "Display_driver.h"
 
-static int countup = 0;
-
+// Low level function to write command to the display
 void Write_Command(char cmd){
     DC_PORT->PIO_CODR = DC;      // DC = 0 (command)
     BUS_PORT->PIO_CODR = 0xff << BUS_SHIFT;
@@ -10,6 +9,7 @@ void Write_Command(char cmd){
     WR_PORT->PIO_SODR = WR;      // WR = 1 
 }
 
+// Low level function to write parameter to the display
 void Write_Parameter(char data){
     DC_PORT->PIO_SODR = DC;     // DC = 1 (data)
     BUS_PORT->PIO_CODR = 0xff << BUS_SHIFT;
@@ -18,28 +18,12 @@ void Write_Parameter(char data){
     WR_PORT->PIO_SODR = WR;     // WR = 1 
 }
 
-void toggle(){
-    if (countup%2) {
-      WR_PORT->PIO_SODR = WR;
-      RD_PORT->PIO_SODR = RD; 
-      DC_PORT->PIO_SODR = DC;
-      RESET_PORT->PIO_SODR = RESET;
-      BUS_PORT->PIO_SODR = 0xff << BUS_SHIFT;
-    }
-    else {
-      WR_PORT->PIO_CODR = WR;
-      RD_PORT->PIO_CODR = RD; 
-      DC_PORT->PIO_CODR = DC; 
-      RESET_PORT->PIO_CODR = RESET;
-      BUS_PORT->PIO_CODR = 0xff << BUS_SHIFT;
-    }
-    countup++;
-}
-
+// Low level initialisation of the display
 void init_LCD() 
 {
-    PMC->PMC_PCER0=7<11; //Enable Peripheral Clock
-
+    //Enable Peripheral Clock
+    PMC->PMC_PCER0=7<11; 
+    
     //Enable PIO
     PIOA->PIO_PER=0x20020000;
     PIOB->PIO_PER=0x00204000;
@@ -128,8 +112,10 @@ void init_LCD()
     }
 }
 
+// Write a character on the screen
 void write_char(int start_x, int start_y, int width, int height, const unsigned char * bit_array, int red, int green, int blue ) {
-    // Set Window parameters
+  
+    // Set Window size
     Write_Command(0x2A);
     Write_Parameter(start_x>>8);
     Write_Parameter(start_x);
@@ -143,32 +129,40 @@ void write_char(int start_x, int start_y, int width, int height, const unsigned 
     
     // Write character from Hexidecimal
     char y;
-    Write_Command(0x2C);
+    Write_Command(0x2C); // Start pixel data
+
+    // Set colour of the displayed text
     int red_value = 0, green_value = 0, blue_value = 0;
     if (red) red_value = 0xFF;
     if (green) green_value = 0xFF;
     if (blue) blue_value = 0xFF;
-    
+
+    // For each byte in the pixel data
     for (int i=0; i<((width*height)/8); i++) {
-        y = bit_array[i];
+        y = bit_array[i]; // obtain byte
+        // For each bit in the byte of pixel data
         for (int j=0; j<8; j++){
-            if (y & 0x80){
+            if (y & 0x80){ // Extract highest bit
                 Write_Parameter(red_value);
                 Write_Parameter(green_value);
                 Write_Parameter(blue_value);
             }
+            // Pixel not displayed so write low
             else {
                 Write_Parameter(0x00);
                 Write_Parameter(0x00);
                 Write_Parameter(0x00);
             }
+            // Move to next bit in raw data byte
             y = y << 1; 
         }
     }
 }
 
+// Display image using raw pixel map
 void display_ppm_image(int start_x, int start_y, int width, int height, const unsigned char * bit_array ){
-     // Set Window parameters
+  
+     // Set Window size
     Write_Command(0x2A);
     Write_Parameter(start_x>>8);
     Write_Parameter(start_x);
@@ -181,14 +175,17 @@ void display_ppm_image(int start_x, int start_y, int width, int height, const un
     Write_Parameter((start_y + height-1));
     
     char c;
-    Write_Command(0x2C);
+    Write_Command(0x2C); // Start pixel data
+    // Write each pixel component
     for (int i=0; i<(width*height*3);) {
         Write_Parameter(bit_array[i++]);
     }
 }
 
+// Clear an area of the screen
 void clear_area(int start_x, int start_y, int width, int height) {
-    // Set Window parameters
+  
+    // Set Window size
     Write_Command(0x2A);
     Write_Parameter(start_x>>8);
     Write_Parameter(start_x);
@@ -203,7 +200,8 @@ void clear_area(int start_x, int start_y, int width, int height) {
     // Write character from Hexidecimal
     char y,z;
     Write_Command(0x2C);
-    
+
+    // Clear each pixel component
     for (int i=0; i<(width*height); i++) {
       Write_Parameter(0x00);
       Write_Parameter(0x00);
@@ -211,8 +209,15 @@ void clear_area(int start_x, int start_y, int width, int height) {
     }
 }
 
+// Display a word on the screen
+// w - pointer to character string
+// x - starting x position
+// y - starting y position
+// r,g,b - colour for text
+// font - font size (options: 24,48,96)
 int write_word(const char * w, int x, int y, int r, int g, int b, int font){
 
+  // Select font size (default size 24)
   Font * current_font;
   if (font == 48) current_font = font_48;
   else if (font == 96) current_font = font_96;
@@ -223,11 +228,12 @@ int write_word(const char * w, int x, int y, int r, int g, int b, int font){
   
   double width;
   int chars = strlen(w);
+  // For each character in the string
   for (int i=0; i < chars; i++){
-    width = ceil((double)current_font[*w].width/8)*8;
-    write_char(x,y,width,font,current_font[*w].data,r,g,b);
-    x = x + current_font[*w].width + 2;
-    w++;
+    width = ceil((double)current_font[*w].width/8)*8; // Get width to nearest byte
+    write_char(x,y,width,font,current_font[*w].data,r,g,b); // Display character
+    x = x + current_font[*w].width + 2; // Move starting position along for next character (leaving space of 2 pixels)
+    w++; // Next  character 
   }
-  return x+5;
+  return x+5; // return end of word position (allowing for space)
 }

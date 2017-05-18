@@ -4,7 +4,7 @@
 #include <due_can.h>
 
 #include "Display_driver.h"
-//#include "formula1.h"
+#include "formula1.h"
 #include "coolant.h"
 #include "ugr.h"
 #include "config.h"
@@ -18,6 +18,7 @@ void setup_screen();
 
 void setup_page(int page_number);
 void update_diagnostics(CAN_FRAME frame);
+void setup_diagnostics_mode();
 void setup_display_mode();
 
 void update_cool(int level);

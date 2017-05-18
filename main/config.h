@@ -13,7 +13,9 @@ DueFlashStorage dueFlashStorage;
 #define MAX_NUM_PAGES 5
 #define NUM_CAN_IDS 7
 #define CAN_IDS_PER_PAGE 6
+#define MAX_CAN_ARRAY_SIZE 32
 
+// Structure used to hold configuration settings in flash memory
 typedef struct configuration {
   int cool_threshold;
   int speed_units;
@@ -23,10 +25,9 @@ typedef struct configuration {
   int num_can_ids;
   int can_ids_per_page;
 } Configuration;
+Configuration configuration;
 
 int current_page;
-
-Configuration configuration;
 
 void setup_config();
 void update_config();

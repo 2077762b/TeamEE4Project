@@ -4,20 +4,25 @@ int cool_start, volt_start;
 
 int screen_delay = 0;
 
-// Show gauges
+// Performs required initialisation for fonts and the display 
 void setup_screen(){
+  
+  // Low level screen configuration
   init_LCD();
+  
+  // Create font libraries 
   setup_font_24();
   setup_font_48();
   setup_font_96();
   
   // Show start-up image
-  //display_ppm_image(0,0,SOURCE,GATE,formula_1_image);
-  //delay(4000);
+  display_ppm_image(0,0,SOURCE,GATE,formula_1_image);
+  delay(4000);
 }
 
+// Set out the screen layout
 void setup_display_mode(){
-  // Setup labels on screen
+
   clear_area(0,0,SOURCE,GATE);
   cool_start = write_word("Cool:\n",200,20,1,1,1,24);
   volt_start = write_word("Volts:\n",200,60,1,1,1,24);
@@ -84,6 +89,8 @@ void update_diagnostics(CAN_FRAME *frame){
   write_word(value,CAN_VALUE_START,(34*location_on_page+20),1,1,1,24);
 }
 
+
+// Update the current value of the coolant on the display
 void update_cool(int level){
   clear_area(cool_start,20,SOURCE-cool_start,24);
 
@@ -92,33 +99,42 @@ void update_cool(int level){
   // Make sure only 3 digits
   if (coolant > 999 || coolant < 0) coolant = 999;
 
-  // Warning colour
+  // Change colour to red if value is above allowed threshold
   int r = 1, g = 1, b = 1;
   if (coolant > configuration.cool_threshold){
     g = 0;
     b = 0;
   }
+  // display or remove warning symbol if above/below allowed threshold
   set_coolant(g == 0);
 
+  // Write value on the screen
   char str[5]; 
   sprintf(str, "%d'C\n", coolant);
   write_word(str,cool_start,20,r,g,b,24);
 }
 
+// Update the current value of the voltage on the display
 void update_volts(int level){
   clear_area(volt_start,60,SOURCE-volt_start,24);
 
+  // Ensure the value is with allowed range
   if (level < 0 | level > 999) level = 0;
 
+  // Extract fraction from the data
   int volts = level/10;
   int point = level%10;
+
+  // Write value on the screen
   char str[6];
   sprintf(str, "%d.%dV\n", volts, point);
   write_word(str,volt_start,60,1,1,1,24);
 }
 
+// Update the current value of the speed on the display
 void update_speed(int level){
 
+  // Convert the value to mph if required
   if (configuration.speed_units == MPH) {
     float conversion_factor = 0.62137;
     int level = (int) level*conversion_factor;
@@ -129,6 +145,7 @@ void update_speed(int level){
   char str[4];
 
   // Make sure only 3 digits
+  // Dynamically resizes
   if (level > 999 || level < 0) {
     level = 999;
     sprintf(str, "%03d\n", level);
@@ -143,13 +160,15 @@ void update_speed(int level){
     sprintf(str, "%01d\n", level);
   }
 
+  // Write value on the screen
   write_word(str,15,20,1,1,1,48);
 }
 
+// Update the current value of the rpm on the display
 void update_rpm(int level){
   clear_area(15,160,165,48);
   
-  // Make sure only 5 digits
+  // Make sure rpm value is less than the configured maximum
   if (level > configuration.max_rpm || level < 0) {
     level = configuration.max_rpm;
   }
@@ -159,25 +178,26 @@ void update_rpm(int level){
   int num_leds = percent * NUM_LEDS;
   set_leds(num_leds);
 
-  if (screen_delay++) {
-    if (screen_delay == 4) screen_delay = 0;
-    char str[6];
-    sprintf(str, "%5d\n", level);
-    write_word(str,15,160,1,1,1,48);
-  }
+  // Write value on the screen
+  char str[6];
+  sprintf(str, "%5d\n", level);
+  write_word(str,15,160,1,1,1,48);
 }
 
+// Update the current value of the gear on the display
 void update_gear(int level){
   clear_area(112,20,67,96);
 
   // Make sure only 1 digit
   if (level > 9 || level < 0) level = 0;
 
+  // Write value on the screen
   char str[2];
   sprintf(str, "%1d\n", level);
   write_word(str,112,20,1,1,1,96);
 }
 
+// Set or unset the coolant warning image
 void set_coolant(int state){
   if (state) display_ppm_image(230,100,48,48,coolant_image);
   else clear_area(230,100,48,48);

@@ -23,9 +23,10 @@
 // PB14 (140)
 #define RESET         0x00004000 
 #define RESET_PORT    PIOB
-   
-#define LEFT_BUTTON   0x00000800 //                 
-#define RIGHT_BUTTON  0x00001000 // 
+
+// PC24 , PC25
+#define LEFT_BUTTON   0x00000800                  
+#define RIGHT_BUTTON  0x00001000 
 
 // 94 to 101 (PC12 - PC19)   
 // Port C, pins 11 (left) and 12 (right) for buttons
@@ -41,7 +42,5 @@ void write_char(int start_x, int start_y, int width, int height, const unsigned 
 void display_ppm_image(int start_x, int start_y, int width, int height, const unsigned char * bit_array);
 void clear_area(int start_x, int start_y, int width, int height);
 int write_word(const char * w, int x, int y, int r, int g, int b, int font);
-
-void toggle();
 
 #endif
