@@ -67,7 +67,7 @@
 
   \vspace{1.0cm}
 
-  Team VoltsWagen would like to thank the following people for their advice and counselling over the course of the project. \\
+  Team VoltsWagen would like to thank the following people for their advice and assistance over the course of the project. \\
 
   \vspace{1.0cm}
 
@@ -76,6 +76,9 @@
   }
   \center{
     Mr Andrew Phillips
+  }
+  \center{
+    Mr Alan Yuill
   }
   \center{
     Dr Jon Trinder
@@ -97,9 +100,9 @@
 \section{Introduction}
 \label{sec:introduction}
 
-As part of the Glasgow University Team Project EE4 course, a steering wheel display has been designed and prototyped for use within a University of Glasgow Racing (UGR) car. UGR is the Glasgow University engineering team competing in Formula Student. Formula Student is a competition inspiring University students to design and build a single-seat race car. Each team’s race car is then put to the test against other teams from around the world. The Formula Student 2017 competition takes place on the 20th July 2017 at Silverstone Circuit, England. \\
+As part of the Glasgow University Team Project EE4 course, a steering wheel display has been designed and prototyped for use within a University of Glasgow Racing (UGR) car. UGR is the Glasgow University engineering team competing in Formula Student. Formula Student is a competition inspiring University students to design and build a single-seat race car. Each team's race car is then put to the test against other teams from around the world. The Formula Student 2017 competition takes place on the 20th July 2017 at Silverstone Circuit, England. \\
 
-This display allows the driver of the car to view live information from the CAN bus about the current status of the car. It is important for the UGR race car driver to be able to view the information concerning the status of the race car because this allows the driver to understand how the car is performing. A regular car dashboard would not suit a racing environment because only specific information should be shown to the driver and there is limited space with the confines of the car `cockpit'. In order for the driver to be able to view this status information, a small display is required. This display would show the car status information such as the speed, RPM, gear number and coolant temperature by attaching directly to the car’s steering wheel. The values of these indicators were to be retrieved from the car's central CAN (Controller Area Network) bus (See Section \ref{sec:device_overview}). \\
+The steering wheel display allows the driver of the car to view live information from the CAN bus about the current status of the car. It is important for the UGR race car driver to be able to view this information because it allows the driver to understand how the car is performing. A regular car dashboard would not suit a racing environment because only specific information should be shown to the driver and there is limited space with the confines of the car `cockpit'. In order for the driver to be able to view this status information, a small display is required. This display shows the car status information such as the speed, revolutions per minute (RPM), gear number and coolant temperature by attaching directly to the car’s steering wheel. The values of these indicators were retrieved from the car's central CAN (Controller Area Network) bus (See Section \ref{sec:device_overview}). \\
 
 Being the main client for the project, UGR were involved throughout the design and manufacturing of the final product. The following report covers the requirements and specifications of the completed steering wheel display, describing in detail each component and the reasons for the design. \\
 
@@ -126,7 +129,7 @@ The device was required to display the following status indicators to the driver
 
 In order to function properly, certain aspects of these displayed values were required to be configurable by the user. This would increase the portability and flexibility of the device. The specific details of the configurability are described further in Section \ref{sec:configuration_software}. \\
 
-The device had to be attachable to the steering wheel. This introduced a size constraint on the overall device. The size constraint provided by the UGR team is that the device needed to fit within 116mm x 70mm x 20mm. This would allow the device to fit within the steering wheel, and not get in the way of the driver. \\
+The device had to be attachable to the steering wheel. This introduced a size constraint on the overall device. The size constraint provided by the UGR team is that the device needed to fit within 116mm x 70mm x 20mm. This would allow it to fit within the steering wheel, and not get in the way of the driver. \\
 
 \textbf{Waterproofing} \\
 
@@ -138,7 +141,7 @@ The device was to be used in a mechanical environment, and therefore needed to b
 
 \textbf{Overheating} \\
 
-The heat budget for the device was also important. The device was to be used for long periods of time on the race track, possibly in warm temperatures. As a result, sufficient precautions for the disipation of heat and the reduction of heat generation from the device needed to be taken.
+The heat budget was also important. The device was to be used for long periods of time on the race track, possibly in warm temperatures. As a result, sufficient precautions for the disipation of heat and the reduction of heat generation needed to be taken.
 
 % ====================================================================================================================
 
@@ -146,7 +149,7 @@ The heat budget for the device was also important. The device was to be used for
 \section{Device Overview}
 \label{sec:device_overview}
 
-The device consisted of four main components: the RPM LEDs, the microcontroller, the LCD screen and the CAN bus electronics. Figure \ref{fig:block_diagram} shows the overall block diagram of the device. \\
+The device consisted of four main components: the RPM LEDs, the microcontroller, the LCD screen and the CAN bus electronics. Figure \ref{fig:block_diagram} shows the overall block diagram. \\
 
 \input{Figures/block_diagram}
 
@@ -276,7 +279,7 @@ As well as the device electronics, the quality of the software is also of high i
 
 CAN was used throughout the UGR racing car in order to pass information between the different components of the car. The steering wheel display was designed to read the relevant car status information from the CAN bus and output this data on its display at real-time speeds. \\
 
-The CAN software was implemented using the Due CAN library \cite{due_can}. This library is compatible with the Arduino Due board. A large amount of information was sent over the car's CAN bus, however not all of this information was relevant to the device. The role of this software was to filter out the irrelevant information, only sending useful information to the device peripherals. The library allowed various mailboxes to be set up, each with a different CAN identifier (ID), that would call the appropriate function to handle the data in the CAN frame. The LCD screen and RPM LEDs could then be updated with the filtered car information via the display software described in Section \ref{sec:display_software}. \\
+The CAN software was implemented using the Due CAN library \cite{due_can}. This library is compatible with the Arduino Due board. A large amount of information was sent over the car's CAN bus, however not all of this information was relevant to the device. The role of this software was to filter out the irrelevant information, only sending useful information to the device peripherals. The library allowed various mailboxes to be set up, each with a different CAN identifier, that would call the appropriate function to handle the data in the CAN frame. The LCD screen and RPM LEDs could then be updated with the filtered car information via the display software described in Section \ref{sec:display_software}. \\
 
 The CAN bus requires a set of CAN frame identifiers in order to sort the bus information. Although these CAN identifiers were already specified by UGR, they were subject to change in the future. As a result, these identifiers had to be designed to be configurable on the device. Configurable CAN identifiers were implemented in the diagnostics software using the configuration menu described in Section \ref{sec:configuration_software}.
 
@@ -285,11 +288,11 @@ The CAN bus requires a set of CAN frame identifiers in order to sort the bus inf
 
 The display software was used to output the relevant car information to the device peripherals: LCD display and RPM LEDs. The main requirement of this part of the software was that it had to be clear and easy to read at a glance. As a result, the colour scheme chosen was black and white, and custom fonts were used to improve the visibility of the displayed values. \\
 
-The development of the display software first involved the development of a custom driver for the LCD display. This was designed to allow text and symbols to be output in a specified location on the LCD display, allowing for ease of configurability of the display output when programming. A hierarchy of functions was implemented to abstract away from the low-level commands being issued to the LCD display driver. The hierarchy of functions is demonstrated in Figure \ref{fig:software_hierarchy}. 
+The development of the display software first involved the development of a custom driver for the LCD display. This was designed to allow text and symbols to be output in a specified location on the LCD display, allowing for ease of configurability of the display output when programming. A hierarchy of functions was implemented to abstract away from the low-level commands being issued to the LCD display driver. The hierarchy of functions is demonstrated in Figure \ref{fig:software_hierarchy}. The green blocks represent the LCD's built-in controller functions. The orange and blue blocks represent the functions implemented by team VoltsWagen.
 
 \input{Figures/software_hierarchy}
 
-This shows the basic low-level functions at the bottom, defined in the LCD's built-in controller, with more abstract functions implemented by team VoltsWagen above. The middle-layer was built on top of the LCD's built-in controller. Basic functions, allowing text and images to be display anywhere on the screen at specified font sizes were implemented. The top layer describes the main dashboard functions that specifically display the car's status information. This main dashboard software was able to make use of the middle-layer functions to output values onto the LCD display. Figure \ref{fig:display} shows the display software outputting example car information. \\
+The middle-layer was built on top of the LCD's built-in controller. Basic functions, allowing text and images to be displayed anywhere on the screen at specified font sizes were implemented. The top layer describes the main dashboard functions that display the car's status information. This main dashboard software was able to make use of the middle-layer functions to output values onto the LCD display. This encapsulation of functionality allowed the programmer to use the high level functions, without knowledge of the low-level particulars.
 
 \input{Figures/display}
 
@@ -298,11 +301,11 @@ DotStar LEDs were used to display the RPM of the engine, as mentioned in Section
 \subsection{Diagnostics Software}
 \label{sec:diagnostics_software}
 
-In order to aid with the debugging of the device with respect to the CAN frames, a Diagnostics Mode was implemented.  When activated, a verbose representation of the CAN bus would be printed onto the LCD display. Figure \ref{fig:diagnostics} shows an example of the CAN diagnostics software in operation. Although this was useful when writing the software, it was also designed to be used by a mechanic for debugging the overall car's CAN bus by allowing the screen to act as a CAN frame probe.
+In order to aid with the debugging of the device with respect to the CAN frames, a `Diagnostics Mode' was implemented.  When activated, a verbose representation of the CAN bus would be printed onto the LCD display. Figure \ref{fig:diagnostics} shows an example of the CAN diagnostics software in operation. Although this was useful when writing the software, it was also designed to be used by a mechanic for debugging the overall car's CAN bus, by allowing the screen to act as a CAN frame probe.
 
 \input{Figures/diagnostics}
 
-Up to 30 different CAN frames were able to be displayed in diagnostics mode. Only 6 CAN frames were to be displayed on the screen at one time, therefore, 6 pages of CAN frames were implemented. The next and previous pages could be viewed by pressing the right and left gear buttons respectively.
+Up to 30 different CAN frames were able to be displayed in Diagnostics Mode. Only 6 CAN frames were to be displayed on the screen at one time, so 6 pages of CAN frames were implemented. The next and previous pages could be viewed by pressing the right and left gear buttons respectively.
 
 \subsection{Configuration Software}
 \label{sec:configuration_software}
@@ -321,7 +324,7 @@ Further configurability of other elements of the software, such as the layout of
 
 \input{Figures/configuration_software}
 
-State was stored on the device using the microcontroller's built-in flash memory. This was implemented in software using the Due Flash Storage library \cite{due_flash_storage}. When activated, by plugging the device into a computer with the serial USB port enabled, the user would be able to select personalised configuration options. After configuration the new values would automatically be loaded into the software when the device is next turned on. If the device was not yet configured, then default values are loaded into the software instead.
+State was stored on the device using the microcontroller's built-in flash memory. This was implemented in software using the Due Flash Storage library \cite{due_flash_storage}. When activated, by plugging the device into a computer with the serial USB port enabled, the user would be able to select personalised configuration options. After configuration, the new values would automatically be loaded into the software when the device is next turned on. If the device was not yet configured, default values were automatically loaded into the software instead.
 
 % ====================================================================================================================
 
@@ -344,11 +347,11 @@ In order to house the device components, an outer enclosure needed to be constru
   \item Must incorporate shifting buttons as they are in the same area of the wheel.
 \end{enumerate}
 
-The outer enclosure was developed using SolidWorks, with reference to the steering wheel CAD provided by UGR. An exploded render of the outer enclosure is shown in Figure \ref{fig:device_render_expanded}. This was 3D printed using through the University.
+The outer enclosure was developed using SolidWorks, with reference to the steering wheel CAD provided by UGR. An exploded render of the outer enclosure is shown in Figure \ref{fig:device_render_expanded}. This was 3D printed through the University.
 
 \input{Figures/device_render_expanded}
 
-The enclosure defined the space requirements for all parts enclosed, and how they must fit together. It was decided that the enclosure would be fixed together external to the gaskets to improve watertightness. Unlike design from previous Team Project EE4 teams, the PCB was separated from the screen into a different section of the case, positioned through the top hole of the steering wheel. This decision greatly improved the aesthetics of the device as it was near flush with the front of the steering wheel.
+The enclosure defined the space requirements for all parts enclosed, and how they must fit together. It was decided that the enclosure would be fixed together external to the waterproofing gaskets because it would improve watertightness. Unlike designs from previous Team Project EE4 teams, the PCB was separated from the screen into a different section of the case, positioned through the top hole of the steering wheel. This decision greatly improved the appearance of the device as it was near flush with the front of the steering wheel.
 
 \subsection{Printed Circuit Board}
 \label{sec:printed_circuit_board}
@@ -375,9 +378,11 @@ As described in Section \ref{sec:outer_enclosure}, the outer enclosure was devel
 \subsection{Total cost for development}
 \label{sec:total_cost}
 
-As expected, the total cost for the fabrication and design of the device is considerably higher than \pounds90. This is because multiple prototypes were constructed and tested. For example, a large PCB text board was fabricated in order to the all of the components together before implementing this on the official PCB. This allowed for time for debugging and changes before the final board was developed. There were also a number of smaller test PCBs fabricated to allow for the testing of individual sections of the device. \\
+As expected, the total cost for the fabrication and design of the device is considerably higher than \pounds90. This is because multiple prototypes were constructed and tested during the design phase. For example, a large PCB test board was fabricated in order to bring the all of the components together, before implementing this on the official PCB. This allowed time for debugging and changes before the final board was developed. There were also a number of smaller test PCBs fabricated to allow for the testing of individual sections of the device. \\
 
-The total cost of components is included in Appendix \ref{app:cost}.
+The total cost of components is included in Appendix \ref{app:cost}. \\
+
+It should be noted that the total cost of the device components is  likely to be considerably less than the cost of the labour, and expert advice that it took to design the device. However, these costs are harder to evaluate.
 
 % ====================================================================================================================
 
@@ -400,7 +405,7 @@ In order for the project to succeed it was crucial to develop a Gantt chart that
 \subsection{Risk Register}
 \label{sec:risk_register}
 
-This was a multi-disciplinary project, with many variables required to get the project device working properly and meeting all of the requirements. In order to mitigate the risk involved, a risk register was developed. This identified many of the project risks, and made sure that the team was keeping them in mind during development. The risk register is included in Appendix \ref{app:risk_register}.
+This was a multi-disciplinary project, with many variables involved to get the project device working properly and meeting all of the requirements. In order to mitigate the risk involved, a risk register was developed. This identified many of the project risks, and made sure that the team was keeping them in mind during development. The risk register is included in Appendix \ref{app:risk_register}.
 
 % ====================================================================================================================
 
@@ -413,7 +418,7 @@ This section describes any possible improvements that could be made to the final
 \subsection{Professionally Fabricated Board}
 \label{sec:future_improvement_1}
 
-The PCB was manufactured in Glasgow University and could have been reduced in size, had it been manufactured externally. This was considered during the project design, however it was decided to not get the PCB professionally made due to the extra cost and the 3 weeks of lead time required for the PCB to be fabricated and sent. A quote of £100 from ‘PCB Train’ was obtained \cite{pcb_train}. Making use of the facilities within the University reduced the project risk because it allowed PCBs to be re-designed and fabricated within a short timeframe (1-4 days, compared to the 2-week quote for a professionally made PCB).
+The PCB was manufactured in Glasgow University and could have been reduced in size, had it been manufactured externally. This was considered during the project design, however it was decided to not get the PCB professionally made due to the extra cost and the 3 weeks of lead time required for the PCB to be fabricated and sent. A quote of \pounds100 from ‘PCB Train’ was obtained \cite{pcb_train}. Making use of the facilities within the University reduced the project risk because it allowed PCBs to be re-designed and fabricated within a short timeframe (1-4 days, compared to the 2-week quote for a professionally made PCB).
 
 % ====================================================================================================================
 
